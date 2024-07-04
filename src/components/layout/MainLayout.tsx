@@ -1,59 +1,8 @@
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
 import { Layout, Menu, MenuProps } from "antd";
-import { createElement } from "react";
 import { Outlet } from "react-router-dom";
+import { adminSidebarItems } from "../../routes/admin.routes";
 
 const { Header, Content, Footer, Sider } = Layout;
-
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    icon: createElement(UserOutlined),
-    label: "nav 1",
-  },
-  {
-    key: "2",
-    icon: createElement(VideoCameraOutlined),
-    label: "nav 2",
-  },
-  {
-    key: "3",
-    icon: createElement(UploadOutlined),
-    label: "nav 3",
-    children: [
-      {
-        key: "3.1",
-        label: "nav 3.1",
-      },
-      {
-        key: "3.2",
-        label: "nav 3.2",
-      },
-      {
-        key: "3.3",
-        label: "nav 3.3",
-        children: [
-          {
-            key: "3.3.1",
-            label: "nav 3.3.1",
-          },
-          {
-            key: "3.3.2",
-            label: "nav 3.3.2",
-          },
-          {
-            key: "3.3.3",
-            label: "nav 3.3.3",
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const MainLayout = () => {
   return (
@@ -85,7 +34,7 @@ const MainLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["4"]}
-          items={items}
+          items={adminSidebarItems as MenuProps["items"]}
         />
       </Sider>
       <Layout>

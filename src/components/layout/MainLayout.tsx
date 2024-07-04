@@ -3,25 +3,60 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 import { createElement } from "react";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  UserOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+const items: MenuProps["items"] = [
+  {
+    key: "1",
+    icon: createElement(UserOutlined),
+    label: "nav 1",
+  },
+  {
+    key: "2",
+    icon: createElement(VideoCameraOutlined),
+    label: "nav 2",
+  },
+  {
+    key: "3",
+    icon: createElement(UploadOutlined),
+    label: "nav 3",
+    children: [
+      {
+        key: "3.1",
+        label: "nav 3.1",
+      },
+      {
+        key: "3.2",
+        label: "nav 3.2",
+      },
+      {
+        key: "3.3",
+        label: "nav 3.3",
+        children: [
+          {
+            key: "3.3.1",
+            label: "nav 3.3.1",
+          },
+          {
+            key: "3.3.2",
+            label: "nav 3.3.2",
+          },
+          {
+            key: "3.3.3",
+            label: "nav 3.3.3",
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const MainLayout = () => {
   return (
-    <Layout>
+    <Layout style={{ height: "100vh" }}>
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
@@ -32,7 +67,19 @@ const MainLayout = () => {
           console.log(collapsed, type);
         }}
       >
-        <div className="demo-logo-vertical" />
+        <div
+          style={{
+            color: "white",
+            textAlign: "center",
+            height: "4rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <h1>Open University</h1>
+        </div>
+
         <Menu
           theme="dark"
           mode="inline"

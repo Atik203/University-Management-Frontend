@@ -1,5 +1,7 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { Link } from "react-router-dom";
+import { useCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppSelector } from "../../redux/hooks";
 import { adminPaths } from "../../routes/admin.routes";
 import { facultyPaths } from "../../routes/faculty.routes";
 import { studentPaths } from "../../routes/student.routes";
@@ -14,7 +16,9 @@ const userRole = {
 };
 
 const Sidebar = () => {
-  const role = "student";
+  const user = useAppSelector(useCurrentUser);
+
+  const role = (user as { role: string })?.role;
   let sidebarItems;
 
   switch (role) {

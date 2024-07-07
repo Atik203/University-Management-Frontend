@@ -1,11 +1,13 @@
 import { ReactNode } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
+
+import { SubmitHandler } from "react-hook-form";
 
 const OpenForm = ({
   onSubmit,
   children,
 }: {
-  onSubmit: (data: any) => void;
+  onSubmit: SubmitHandler<FieldValues>;
   children: ReactNode;
 }) => {
   const methods = useForm();

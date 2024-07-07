@@ -13,7 +13,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={router} />
-        <Toaster visibleToasts={10} richColors={true} />
+        <Toaster
+          visibleToasts={10}
+          richColors={true}
+          toastOptions={{
+            style: {
+              background: "mediumseagreen",
+              color: "white",
+              fontSize: "16px",
+              padding: "16px",
+              borderRadius: "6px",
+            },
+          }}
+        />
       </PersistGate>
     </Provider>
   </React.StrictMode>

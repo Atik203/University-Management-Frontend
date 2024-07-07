@@ -8,6 +8,10 @@ import { useLoginMutation } from "../redux/features/auth/authApi";
 import { setUser, TUser } from "../redux/features/auth/authSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
+const defaultValues = {
+  id: "A-0001",
+  password: "password123",
+};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,7 +42,7 @@ const Login = () => {
 
   return (
     <Row justify={"center"} align={"middle"} style={{ height: "100vh" }}>
-      <OpenForm onSubmit={onSubmit}>
+      <OpenForm onSubmit={onSubmit} defaultValues={defaultValues}>
         <OpenInput type="text" name="id" label="ID " />
 
         <OpenInput type="text" name="password" label="Password " />

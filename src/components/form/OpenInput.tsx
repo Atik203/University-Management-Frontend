@@ -1,15 +1,13 @@
 import { Input } from "antd";
 import { Controller } from "react-hook-form";
 
-const OpenInput = ({
-  type,
-  name,
-  label,
-}: {
+type TOpenInputProps = {
   type: string;
   name: string;
-  label: string;
-}) => {
+  label?: string;
+};
+
+const OpenInput = ({ type, name, label }: TOpenInputProps) => {
   return (
     <div
       style={{

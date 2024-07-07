@@ -2,15 +2,21 @@ import { ReactNode } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
 import { SubmitHandler } from "react-hook-form";
-
-const OpenForm = ({
-  onSubmit,
-  children,
-}: {
+type TFormConfig = {
+  defaultValues?: Record<string, unknown>;
+};
+type TOpenFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
   children: ReactNode;
-}) => {
-  const methods = useForm();
+} & TFormConfig;
+
+const OpenForm = ({ onSubmit, children, defaultValues }: TOpenFormProps) => {
+  const formConfig: TFormConfig = {};
+  if (defaultValues) {
+    formConfig["defaultValues"] = defaultValues;
+  }
+
+  const methods = useForm(formConfig);
 
   return (
     <FormProvider {...methods}>

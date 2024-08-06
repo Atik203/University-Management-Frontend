@@ -26,11 +26,11 @@ const CreateAcademicSemester = () => {
       };
       const result = await AddAcademicSemester(semesterData).unwrap();
       if (result.success) {
-        toast.success("Create academic semester successfully", {
+        toast.success(result?.message, {
           id: toastId,
         });
       } else {
-        toast.error("Failed to create academic semester", { id: toastId });
+        toast.error(result?.message, { id: toastId });
       }
     } catch (error) {
       toast.error("Something went wrong", { id: toastId });

@@ -33,11 +33,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             },
           }}
           icons={{
+            loading: <MagnifyingGlassCircleIcon className="w-6 h-6" />,
             success: <CheckBadgeIcon className="w-6 h-6" />,
             info: <InformationCircleIcon className="w-6 h-6" />,
             warning: <ExclamationCircleIcon className="w-6 h-6" />,
             error: <ExclamationTriangleIcon className="w-6 h-6" />,
-            loading: <MagnifyingGlassCircleIcon className="w-6 h-6" />,
           }}
         />
       </PersistGate>

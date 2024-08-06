@@ -21,7 +21,16 @@ const OpenForm = ({ onSubmit, children, defaultValues }: TOpenFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <Form onFinish={methods.handleSubmit(onSubmit)}>{children}</Form>
+      <Form
+        style={{
+          fontWeight: "bold",
+          fontSize: "1.25rem",
+        }}
+        layout="vertical"
+        onFinish={methods.handleSubmit(onSubmit)}
+      >
+        {children}
+      </Form>
     </FormProvider>
   );
 };

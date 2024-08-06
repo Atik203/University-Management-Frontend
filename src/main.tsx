@@ -29,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               error: "toast-error toast-common",
               warning: "toast-warning toast-common",
               info: "toast-info toast-common",
+              loading: "toast-loading toast-common",
             },
           }}
           icons={{

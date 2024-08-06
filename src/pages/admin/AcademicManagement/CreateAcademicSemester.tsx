@@ -1,19 +1,9 @@
 import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
 import OpenSelect from "../../../components/form/OpenSelect";
+import { monthOptions } from "../../../constants/global";
+import { nameOptions, yearOptions } from "../../../constants/semester";
 import OpenForm from "./../../../components/form/OpenForm";
-
-const nameOptions = [
-  { value: "01", label: "Autumn" },
-  { value: "02", label: "Summer" },
-  { value: "03", label: "Fall" },
-];
-
-const currentYear = new Date().getFullYear();
-const yearOptions = [0, 1, 2, 3, 4].map((number) => ({
-  value: (currentYear + number).toString(),
-  label: (currentYear + number).toString(),
-}));
 
 const CreateAcademicSemester = () => {
   const onSubmit: SubmitErrorHandler<FieldValues> = (data) => {
@@ -32,7 +22,16 @@ const CreateAcademicSemester = () => {
         <OpenForm onSubmit={onSubmit}>
           <OpenSelect label="Name" name="name" options={nameOptions} />
           <OpenSelect label="Year" name="year" options={yearOptions} />
-
+          <OpenSelect
+            label="Start Month"
+            name="startMonth"
+            options={monthOptions}
+          />
+          <OpenSelect
+            label="End Month"
+            name="endMonth"
+            options={monthOptions}
+          />
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

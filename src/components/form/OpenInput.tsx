@@ -16,7 +16,7 @@ const OpenInput = ({ type, name, label }: TOpenInputProps) => {
     >
       <Controller
         name={name}
-        render={({ field }) => {
+        render={({ field, fieldState: { error } }) => {
           return (
             <Form.Item
               label={label}
@@ -40,6 +40,7 @@ const OpenInput = ({ type, name, label }: TOpenInputProps) => {
                   fontSize: "16px",
                 }}
               />
+              {error && <small style={{ color: "red" }}>{error.message}</small>}
             </Form.Item>
           );
         }}

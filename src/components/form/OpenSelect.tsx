@@ -12,7 +12,7 @@ const OpenSelect: FC<SelectProps> = ({ label, name, options }) => {
   return (
     <Controller
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <Form.Item label={label} style={{ marginBottom: "1rem" }}>
           <Select
             style={{
@@ -25,6 +25,7 @@ const OpenSelect: FC<SelectProps> = ({ label, name, options }) => {
             {...field}
             options={options}
           />
+          {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>
       )}
     />

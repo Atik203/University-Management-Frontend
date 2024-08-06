@@ -2,15 +2,14 @@ import { baseApi } from "../../api/baseApi";
 
 const academicManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllSemester: builder.query({
+    getAllSemesters: builder.query({
       query: () => ({
         url: "/semesters",
         method: "GET",
       }),
       providesTags: ["AcademicSemester"],
     }),
-
-    createAcademicSemester: builder.mutation({
+    addAcademicSemester: builder.mutation({
       query: (data) => ({
         url: "/semesters/create-academic-semester",
         method: "POST",
@@ -21,5 +20,5 @@ const academicManagementApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllSemesterQuery, useCreateAcademicSemesterMutation } =
+export const { useGetAllSemestersQuery, useAddAcademicSemesterMutation } =
   academicManagementApi;

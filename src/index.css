@@ -4,13 +4,16 @@
   box-sizing: border-box;
 }
 
+.toast-loading {
+  background-color: #9bc0e2 !important; /* Blue */
+}
+
 .toast-success {
   background-color: #38a169 !important; /* Green */
 }
 
 .toast-error {
   background-color: #e53e3e !important; /* Red */
-  color: white;
 }
 
 .toast-warning {

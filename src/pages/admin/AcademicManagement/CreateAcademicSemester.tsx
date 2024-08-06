@@ -1,16 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
+import { toast } from "sonner";
 import OpenSelect from "../../../components/form/OpenSelect";
 import { monthOptions } from "../../../constants/global";
 import { nameOptions, yearOptions } from "../../../constants/semester";
+import { useAddAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement.api";
 import { academicSemesterSchema } from "../../../schemas/academicManagement.schema";
 import OpenForm from "./../../../components/form/OpenForm";
 
 const CreateAcademicSemester = () => {
-  const onSubmit: SubmitErrorHandler<FieldValues> = (data) => {
-    const name = nameOptions[Number(data?.name) - 1].label;
+  const [AddAcademicSemester] = useAddAcademicSemesterMutation();
 
+  const onSubmit: SubmitErrorHandler<FieldValues> = async (data) => {
+    const name = nameOptions[Number(data?.name) - 1].label;
     const semesterData = {
       name,
       code: data.name,
@@ -18,6 +21,21 @@ const CreateAcademicSemester = () => {
       startMonth: data.startMonth,
       endMonth: data.endMonth,
     };
+
+    const toastId = toast.loading("Creating academic semester...");
+
+    try {
+      const result = await AddAcademicSemester(semesterData).unwrap();
+      if (result.success) {
+        toast.success("Create academic semester successfully", {
+          id: toastId,
+        });
+      } else {
+        toast.error("Failed to create academic semester", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId });
+    }
   };
 
   return (

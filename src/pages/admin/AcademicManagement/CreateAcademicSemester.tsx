@@ -9,13 +9,20 @@ const nameOptions = [
   { value: "03", label: "Fall" },
 ];
 
+const currentYear = new Date().getFullYear();
+const yearOptions = [0, 1, 2, 3, 4].map((number) => ({
+  value: (currentYear + number).toString(),
+  label: (currentYear + number).toString(),
+}));
+
 const CreateAcademicSemester = () => {
   const onSubmit: SubmitErrorHandler<FieldValues> = (data) => {
-    const name = nameOptions[Number(data.name) - 1].label;
+    const name = nameOptions[Number(data?.name) - 1].label;
 
     const semesterData = {
       name,
       code: data.name,
+      year: data.year,
     };
   };
 
@@ -24,6 +31,7 @@ const CreateAcademicSemester = () => {
       <Col span={7}>
         <OpenForm onSubmit={onSubmit}>
           <OpenSelect label="Name" name="name" options={nameOptions} />
+          <OpenSelect label="Year" name="year" options={yearOptions} />
 
           <Button type="primary" htmlType="submit">
             Submit

@@ -21,6 +21,7 @@ const OpenSelect: FC<SelectProps> = ({ label, name, options }) => {
               color: "black",
               fontSize: "16px",
             }}
+            size="large"
             {...field}
             options={options}
           />

@@ -1,20 +1,76 @@
-name: Auto approve and merge
+name: Demo to create automatic PR
 
-on: pull_request_target
+on:
+  push:
+    branches:
+      - part-4
 
 jobs:
-  auto-approve-and-merge:
+  updateAuthor:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Auto approve
-        uses: hmarr/auto-approve-action@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract git commit data
+        uses: rlespinasse/git-commit-data-action@v1.5.0
+
+      - name: Update author information
+        run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: "auto-pr-branch"
+          base: main
+          title: "PR: part-4"
+          committer: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          author: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          body: |
+            This pull request is automatically created to merge changes from part-4 branch to main.
+          token: ${{ secrets.GH_TOKEN }}
+          delete-branch: false
+
+      - name: Approve Pull Request
+        uses: juliangruber/approve-pull-request-action@v2
         with:
           github-token: ${{ secrets.GH_TOKEN }}
-          review-message: "Auto approved automated PR"
-      - name: Auto merge
-        uses: pascalgn/automerge-action@v0.14.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          number: ${{ steps.create-pr.outputs.pull-request-number }}
+
+      - name: Merge Pull Request
+        uses: juliangruber/merge-pull-request-action@v1.3.0
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          number: ${{ steps.create-pr.outputs.pull-request-number }}
+          method: squash
+
+      - name: Update author information again
+        run: echo Atik > AUTHOR
+
+      - name: Create Second Pull Request
+        id: create-pr-2
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: "auto-pr-branch-2"
+          base: main
+          title: "PR: part-4 - Second Update"
+          committer: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          author: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          body: |
+            This pull request is automatically created to merge the second update from part-4 branch to main.
+          token: ${{ secrets.GH_TOKEN }}
+          delete-branch: false
+
+      - name: Approve Second Pull Request
+        uses: juliangruber/approve-pull-request-action@v2
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          number: ${{ steps.create-pr-2.outputs.pull-request-number }}
+
+      - name: Merge Second Pull Request
+        uses: juliangruber/merge-pull-request-action@v1.3.0
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          number: ${{ steps.create-pr-2.outputs.pull-request-number }}
+          method: squash

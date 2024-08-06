@@ -1,18 +1,23 @@
 import type { TableColumnsType, TableProps } from "antd";
-import { Table } from "antd";
+import { Button, Flex, Table } from "antd";
 import { useState } from "react";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { TQueryParam } from "../../../types";
 import { TAcademicSemester } from "../../../types/academicManagement.types";
 
 type TTableData = Pick<
   TAcademicSemester,
-  "_id" | "name" | "startMonth" | "endMonth" | "year"
+  "name" | "startMonth" | "endMonth" | "year"
 >;
 
 const AcademicSemester = () => {
-  const [params, setParams] = useState<{ name: string; value: string }[]>([]);
+  const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
 
-  const { data: semesterData } = useGetAllSemestersQuery(params);
+  const {
+    data: semesterData,
+    isFetching,
+    isLoading,
+  } = useGetAllSemestersQuery(params);
 
   const tableData = semesterData?.data?.map(
     ({ _id, name, startMonth, endMonth, year }) => ({
@@ -69,6 +74,19 @@ const AcademicSemester = () => {
         },
       ],
     },
+    {
+      title: "Action",
+      render: () => {
+        return (
+          <Flex justify="center" align="center" gap={5}>
+            <Button type="primary">Edit</Button>
+            <Button style={{ backgroundColor: "red", color: "white" }}>
+              Delete
+            </Button>
+          </Flex>
+        );
+      },
+    },
   ];
 
   const onChange: TableProps<TTableData>["onChange"] = (
@@ -78,7 +96,7 @@ const AcademicSemester = () => {
     extra
   ) => {
     if (extra.action === "filter") {
-      const queryParams: { name: string; value: string }[] = [];
+      const queryParams: TQueryParam[] = [];
       filters.name?.forEach((item) => {
         queryParams.push({ name: "name", value: item as string });
       });
@@ -101,6 +119,7 @@ const AcademicSemester = () => {
       columns={columns}
       dataSource={tableData}
       onChange={onChange}
+      loading={isFetching || isLoading}
     />
   );
 };

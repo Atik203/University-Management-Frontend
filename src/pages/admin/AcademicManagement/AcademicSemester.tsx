@@ -1,5 +1,6 @@
 import type { TableColumnsType, TableProps } from "antd";
 import { Table } from "antd";
+import { useState } from "react";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { TAcademicSemester } from "../../../types/academicManagement.types";
 
@@ -9,14 +10,13 @@ type TTableData = Pick<
 >;
 
 const AcademicSemester = () => {
-  const { data: semesterData } = useGetAllSemestersQuery([
-    { name: "name", value: "Fall" },
-    { name: "year", value: "2024" },
-  ]);
+  const [params, setParams] = useState<{ name: string; value: string }[]>([]);
+
+  const { data: semesterData } = useGetAllSemestersQuery(params);
 
   const tableData = semesterData?.data?.map(
     ({ _id, name, startMonth, endMonth, year }) => ({
-      _id,
+      key: _id,
       name,
       startMonth,
       endMonth,
@@ -30,36 +30,16 @@ const AcademicSemester = () => {
       dataIndex: "name",
       filters: [
         {
-          text: "Joe",
-          value: "Joe",
+          text: "Autumn",
+          value: "Autumn",
         },
         {
-          text: "Category 1",
-          value: "Category 1",
-          children: [
-            {
-              text: "Yellow",
-              value: "Yellow",
-            },
-            {
-              text: "Pink",
-              value: "Pink",
-            },
-          ],
+          text: "Summer",
+          value: "Summer",
         },
         {
-          text: "Category 2",
-          value: "Category 2",
-          children: [
-            {
-              text: "Green",
-              value: "Green",
-            },
-            {
-              text: "Black",
-              value: "Black",
-            },
-          ],
+          text: "Fall",
+          value: "Fall",
         },
       ],
     },
@@ -74,6 +54,20 @@ const AcademicSemester = () => {
     {
       title: "Year",
       dataIndex: "year",
+      filters: [
+        {
+          text: "2024",
+          value: "2024",
+        },
+        {
+          text: "2025",
+          value: "2025",
+        },
+        {
+          text: "2026",
+          value: "2026",
+        },
+      ],
     },
   ];
 
@@ -83,7 +77,18 @@ const AcademicSemester = () => {
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    if (extra.action === "filter") {
+      const queryParams: { name: string; value: string }[] = [];
+      filters.name?.forEach((item) => {
+        queryParams.push({ name: "name", value: item as string });
+      });
+
+      filters.year?.forEach((item) => {
+        queryParams.push({ name: "year", value: item as string });
+      });
+
+      setParams(queryParams);
+    }
   };
 
   return (

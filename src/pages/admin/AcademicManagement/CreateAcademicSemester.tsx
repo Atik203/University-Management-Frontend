@@ -1,6 +1,6 @@
 import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
-import OpenInput from "../../../components/form/OpenInput";
+import OpenSelect from "../../../components/form/OpenSelect";
 import OpenForm from "./../../../components/form/OpenForm";
 
 const CreateAcademicSemester = () => {
@@ -12,7 +12,7 @@ const CreateAcademicSemester = () => {
     <Flex justify="center" align="center">
       <Col span={7}>
         <OpenForm onSubmit={onSubmit}>
-          <OpenInput label="Semester Name" type="text" name="name" />
+          <OpenSelect label="Name" />
 
           <Button type="primary" htmlType="submit">
             Submit

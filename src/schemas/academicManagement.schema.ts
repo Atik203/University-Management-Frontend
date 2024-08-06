@@ -30,3 +30,16 @@ export const academicFacultySchema = z.object({
     })
     .min(1),
 });
+
+export const academicDepartmentSchema = z.object({
+  name: z
+    .string({
+      required_error: "Name is required",
+    })
+    .min(1),
+  academicFaculty: z
+    .string({
+      required_error: "Faculty is required",
+    })
+    .min(1),
+});

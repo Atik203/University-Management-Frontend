@@ -2,13 +2,13 @@ import { Form, Select } from "antd";
 import { FC } from "react";
 import { Controller } from "react-hook-form";
 
-type SelectProps = {
+export type TSelectProps = {
   label: string;
   name: string;
   options: { value: string; label: string; disabled?: boolean }[];
 };
 
-const OpenSelect: FC<SelectProps> = ({ label, name, options }) => {
+const OpenSelect: FC<TSelectProps> = ({ label, name, options }) => {
   return (
     <Controller
       name={name}

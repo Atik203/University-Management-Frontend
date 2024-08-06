@@ -15,3 +15,11 @@ export interface TAcademicFaculty {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TAcademicDepartment {
+  _id: string;
+  name: string;
+  academicFaculty: TAcademicFaculty;
+  createdAt: string;
+  updatedAt: string;
+}

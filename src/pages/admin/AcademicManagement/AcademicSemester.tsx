@@ -1,9 +1,19 @@
 import type { TableColumnsType, TableProps } from "antd";
 import { Button, Flex, Table } from "antd";
 import { useState } from "react";
+import { monthOptions } from "../../../constants/global";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { TQueryParam } from "../../../types";
 import { TAcademicSemester } from "../../../types/academicManagement.types";
+
+const MonthFilterOptions: { text: string; value: string }[] = [];
+
+for (let i = 1; i <= 12; i++) {
+  MonthFilterOptions.push({
+    text: monthOptions[i - 1].value,
+    value: monthOptions[i - 1].value,
+  });
+}
 
 type TTableData = Pick<
   TAcademicSemester,
@@ -51,10 +61,12 @@ const AcademicSemester = () => {
     {
       title: "Start Month",
       dataIndex: "startMonth",
+      filters: MonthFilterOptions,
     },
     {
       title: "End Month",
       dataIndex: "endMonth",
+      filters: MonthFilterOptions,
     },
     {
       title: "Year",
@@ -90,9 +102,9 @@ const AcademicSemester = () => {
   ];
 
   const onChange: TableProps<TTableData>["onChange"] = (
-    pagination,
+    _pagination,
     filters,
-    sorter,
+    _sorter,
     extra
   ) => {
     if (extra.action === "filter") {
@@ -103,6 +115,14 @@ const AcademicSemester = () => {
 
       filters.year?.forEach((item) => {
         queryParams.push({ name: "year", value: item as string });
+      });
+
+      filters.startMonth?.forEach((item) => {
+        queryParams.push({ name: "startMonth", value: item as string });
+      });
+
+      filters.endMonth?.forEach((item) => {
+        queryParams.push({ name: "endMonth", value: item as string });
       });
 
       setParams(queryParams);

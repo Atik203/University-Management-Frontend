@@ -1,3 +1,4 @@
+import { Form } from "antd";
 import { ReactNode } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
@@ -20,7 +21,7 @@ const OpenForm = ({ onSubmit, children, defaultValues }: TOpenFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <Form onFinish={methods.handleSubmit(onSubmit)}>{children}</Form>
     </FormProvider>
   );
 };

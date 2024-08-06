@@ -26,6 +26,7 @@ const OpenInput = ({ type, name, label }: TOpenInputProps) => {
               }}
             >
               <Input
+                size="large"
                 {...field}
                 placeholder={name}
                 type={type}

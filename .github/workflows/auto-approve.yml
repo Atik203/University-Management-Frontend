@@ -19,9 +19,6 @@ jobs:
         id: get-commit-message
         run: echo "::set-output name=message::$(git log -1 --pretty=%B)"
 
-      - name: Update author information
-        run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
-
       - name: Create Pull Request
         id: create-pr
         uses: peter-evans/create-pull-request@v6
@@ -46,6 +43,3 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
           number: ${{ steps.create-pr.outputs.pull-request-number }}
           method: squash
-
-      - name: Update author information again
-        run: echo Atik203 > AUTHOR

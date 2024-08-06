@@ -10,6 +10,7 @@ import {
 import { toast } from "sonner";
 import { logout, setUser } from "../features/auth/authSlice";
 import { RootState } from "../store";
+
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api/v1",
   credentials: "include",
@@ -62,6 +63,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
+  tagTypes: ["AcademicSemester"],
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
 });

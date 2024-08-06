@@ -1,15 +1,16 @@
-import { TResponseRedux } from "../../../types";
+import { TQueryParam, TResponseRedux } from "../../../types";
 import { TAcademicSemester } from "../../../types/academicManagement.types";
 import { baseApi } from "../../api/baseApi";
 
 const academicManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSemesters: builder.query({
-      query: (args: { name: string; value: string }[]) => {
+      query: (args) => {
         const params = new URLSearchParams();
-        if (args.length) {
-          args.forEach(({ name, value }) => {
-            params.append(name, value);
+
+        if (args) {
+          args.forEach(({ name, value }: TQueryParam) => {
+            params.append(name, value as string);
           });
         }
 

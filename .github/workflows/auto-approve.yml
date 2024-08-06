@@ -15,6 +15,10 @@ jobs:
       - name: Extract git commit data
         uses: rlespinasse/git-commit-data-action@v1.5.0
 
+      - name: Get latest commit message
+        id: get-commit-message
+        run: echo "::set-output name=message::$(git log -1 --pretty=%B)"
+
       - name: Update author information
         run: echo ${{ env.GIT_COMMIT_AUTHOR_NAME }} > AUTHOR
 
@@ -22,13 +26,11 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: "auto-pr-branch"
+          branch: "part-4"
           base: main
-          title: "PR: part-4"
+          title: ${{ steps.get-commit-message.outputs.message }}
           committer: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
           author: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          body: |
-            This pull request is automatically created to merge changes from part-4 branch to main.
           token: ${{ secrets.GH_TOKEN }}
           delete-branch: false
 
@@ -46,31 +48,4 @@ jobs:
           method: squash
 
       - name: Update author information again
-        run: echo Atik > AUTHOR
-
-      - name: Create Second Pull Request
-        id: create-pr-2
-        uses: peter-evans/create-pull-request@v6
-        with:
-          branch: "auto-pr-branch-2"
-          base: main
-          title: "PR: part-4 - Second Update"
-          committer: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          author: Atik203 <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          body: |
-            This pull request is automatically created to merge the second update from part-4 branch to main.
-          token: ${{ secrets.GH_TOKEN }}
-          delete-branch: false
-
-      - name: Approve Second Pull Request
-        uses: juliangruber/approve-pull-request-action@v2
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          number: ${{ steps.create-pr-2.outputs.pull-request-number }}
-
-      - name: Merge Second Pull Request
-        uses: juliangruber/merge-pull-request-action@v1.3.0
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          number: ${{ steps.create-pr-2.outputs.pull-request-number }}
-          method: squash
+        run: echo Atik203 > AUTHOR

@@ -4,7 +4,7 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
-import OpenSelect, { TSelectProps } from "../../../components/form/OpenSelect";
+import OpenSelect from "../../../components/form/OpenSelect";
 import { bloodGroupOptions, genderOptions } from "../../../constants/global";
 import {
   useGetAllAcademicDepartmentsQuery,
@@ -73,12 +73,10 @@ const CreateStudent = () => {
   const academicDepartmentOptions = departmentData?.data?.map((department) => ({
     value: department._id,
     label: department.name,
-    disabled: isDepartmentFetching || isDepartmentLoading,
   }));
   const academicSemesterOptions = semesterData?.data?.map((semester) => ({
     value: semester._id,
     label: semester.name + " " + semester.year,
-    disabled: isSemesterFetching || isSemesterLoading,
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -248,14 +246,16 @@ const CreateStudent = () => {
               <OpenSelect
                 label="Admission Semester"
                 name="admissionSemester"
-                options={academicSemesterOptions as TSelectProps["options"]}
+                options={academicSemesterOptions}
+                disabled={isSemesterFetching || isSemesterLoading}
               />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenSelect
                 label="Academic Department"
                 name="academicDepartment"
-                options={academicDepartmentOptions as TSelectProps["options"]}
+                options={academicDepartmentOptions}
+                disabled={isDepartmentFetching || isDepartmentLoading}
               />
             </Col>
           </Row>

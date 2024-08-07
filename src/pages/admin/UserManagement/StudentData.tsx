@@ -1,6 +1,7 @@
 import type { TableColumnsType, TableProps } from "antd";
 import { Button, Flex, Pagination, Table } from "antd";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
 import { TQueryParam, TStudent } from "../../../types";
 
@@ -85,13 +86,18 @@ const StudentData = () => {
     },
     {
       title: "Action",
-      render: () => {
+      render: (item) => {
         return (
           <Flex justify="center" align="center" gap={6}>
-            <Button type="primary">Details</Button>
-            <Button type="primary" style={{ backgroundColor: "green" }}>
-              Edit
-            </Button>
+            <Link to={item?.key}>
+              {" "}
+              <Button type="primary">Details</Button>{" "}
+            </Link>
+            <Link to={`update/${item?.key}`}>
+              <Button type="primary" style={{ backgroundColor: "green" }}>
+                Edit
+              </Button>
+            </Link>
             <Button style={{ backgroundColor: "red", color: "white" }}>
               Block
             </Button>

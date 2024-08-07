@@ -1,3 +1,8 @@
+import { Button } from "antd";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import OpenForm from "../../../components/form/OpenForm";
+import OpenInput from "../../../components/form/OpenInput";
+
 const CreateStudent = () => {
   const student = {
     password: "password123",
@@ -34,10 +39,20 @@ const CreateStudent = () => {
     },
   };
 
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    console.log(data);
+  };
+
   return (
-    <div>
-      <h1>This is CreateStudent component</h1>
-    </div>
+    <OpenForm onSubmit={onSubmit}>
+      <OpenInput label="First Name" name="firstName" type="text" />
+      <OpenInput label="Middle Name" name="middleName" type="text" />
+      <OpenInput label="Last Name" name="lastName" type="text" />
+
+      <Button type="primary" htmlType="submit">
+        Submit
+      </Button>
+    </OpenForm>
   );
 };
 

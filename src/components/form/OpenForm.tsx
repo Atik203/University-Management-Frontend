@@ -29,6 +29,11 @@ const OpenForm = ({
 
   const methods = useForm(formConfig);
 
+  const submit: SubmitHandler<FieldValues> = (data) => {
+    onSubmit(data);
+    methods.reset();
+  };
+
   return (
     <FormProvider {...methods}>
       <Form
@@ -37,7 +42,7 @@ const OpenForm = ({
           fontSize: "1.25rem",
         }}
         layout="vertical"
-        onFinish={methods.handleSubmit(onSubmit)}
+        onFinish={methods.handleSubmit(submit)}
       >
         {children}
       </Form>

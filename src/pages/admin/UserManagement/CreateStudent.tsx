@@ -59,16 +59,26 @@ const CreateStudent = () => {
     },
   };
 
-  const { data: departmentData } = useGetAllAcademicDepartmentsQuery(undefined);
-  const { data: semesterData } = useGetAllSemestersQuery(undefined);
+  const {
+    data: departmentData,
+    isFetching: isDepartmentFetching,
+    isLoading: isDepartmentLoading,
+  } = useGetAllAcademicDepartmentsQuery(undefined);
+  const {
+    data: semesterData,
+    isFetching: isSemesterFetching,
+    isLoading: isSemesterLoading,
+  } = useGetAllSemestersQuery(undefined);
 
   const academicDepartmentOptions = departmentData?.data?.map((department) => ({
     value: department._id,
     label: department.name,
+    disabled: isDepartmentFetching || isDepartmentLoading,
   }));
   const academicSemesterOptions = semesterData?.data?.map((semester) => ({
     value: semester._id,
     label: semester.name + " " + semester.year,
+    disabled: isSemesterFetching || isSemesterLoading,
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -249,6 +259,7 @@ const CreateStudent = () => {
               />
             </Col>
           </Row>
+
           <Button
             type="primary"
             htmlType="submit"

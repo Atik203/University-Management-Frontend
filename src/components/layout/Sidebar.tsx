@@ -5,6 +5,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { adminPaths } from "../../routes/admin.routes";
 import { facultyPaths } from "../../routes/faculty.routes";
 import { studentPaths } from "../../routes/student.routes";
+import { TUserPath } from "../../types";
 import { sidebarItemsGenerator } from "../../utils/sidebarItemsGenerator";
 
 const { Sider } = Layout;
@@ -23,7 +24,10 @@ const Sidebar = () => {
 
   switch (role) {
     case userRole.ADMIN:
-      sidebarItems = sidebarItemsGenerator(adminPaths, userRole.ADMIN);
+      sidebarItems = sidebarItemsGenerator(
+        adminPaths as TUserPath[],
+        userRole.ADMIN
+      );
       break;
     case userRole.FACULTY:
       sidebarItems = sidebarItemsGenerator(facultyPaths, userRole.FACULTY);

@@ -1,21 +1,44 @@
 import type { TableColumnsType, TableProps } from "antd";
-import { Button, Flex, Table } from "antd";
+import { Button, Flex, Pagination, Table } from "antd";
 import { useState } from "react";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
 import { TQueryParam, TStudent } from "../../../types";
 
-type TTableData = Pick<TStudent, "name" | "id">;
+type TTableData = Pick<
+  TStudent,
+  | "name"
+  | "id"
+  | "fullName"
+  | "academicDepartment"
+  | "admissionSemester"
+  | "academicFaculty"
+> & {
+  key: string;
+  email: string;
+  department: string;
+  faculty: string;
+  semester: string;
+};
 
 const StudentData = () => {
-  const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
+  const [params, setParams] = useState<TQueryParam[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   const {
     data: semesterData,
     isFetching,
     isLoading,
-  } = useGetAllStudentsQuery(params);
+  } = useGetAllStudentsQuery([
+    ...params,
+    { name: "limit", value: "2" },
+    { name: "page", value: page.toString() },
+    { name: "sort", value: "id" },
+  ]);
 
-  const tableData = semesterData?.data?.map(
+  const meta = semesterData?.meta;
+
+  // @ts-expect-error - data is possibly undefined
+  const tableData: TTableData[] | undefined = semesterData?.data?.map(
     ({
       _id,
       fullName,
@@ -95,17 +118,27 @@ const StudentData = () => {
   };
 
   return (
-    <Table
-      style={{
-        color: "black",
-        fontWeight: "medium",
-        fontSize: "1rem",
-      }}
-      columns={columns}
-      dataSource={tableData}
-      onChange={onChange}
-      loading={isFetching || isLoading}
-    />
+    <>
+      <Table
+        style={{
+          color: "black",
+          fontWeight: "medium",
+          fontSize: "1rem",
+        }}
+        columns={columns}
+        dataSource={tableData}
+        onChange={onChange}
+        loading={isFetching || isLoading}
+        pagination={false}
+      />
+      <Pagination
+        onChange={(value) => setPage(value)}
+        align="center"
+        pageSize={meta?.limit}
+        total={meta?.total}
+        current={page}
+      />
+    </>
   );
 };
 

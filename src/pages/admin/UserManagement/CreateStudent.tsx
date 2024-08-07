@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Col, Divider, Row } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
 import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
@@ -13,45 +13,38 @@ import {
   useGetAllAcademicDepartmentsQuery,
   useGetAllSemestersQuery,
 } from "../../../redux/features/admin/academicManagement.api";
-import { createStudentValidationSchema } from "../../../schemas/userManagement.schema";
+import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement.api";
 
 const CreateStudent = () => {
   const student = {
-    password: "password123",
-    student: {
-      name: {
-        firstName: "John",
-        middleName: "Doe",
-        lastName: "Smith",
-      },
-      gender: "male",
-      dateOfBirth: "2000-01-01",
-      bloodGroup: "A+",
-
-      email: "johndone2@gmail.com",
+    name: {
+      firstName: "John",
+      middleName: "Doe",
+      lastName: "Smith",
+    },
+    gender: "male",
+    bloodGroup: "A+",
+    email: "johndone2@gmail.com",
+    contactNo: "1234567890",
+    emergencyContactNo: "0987654321",
+    presentAddress: "123 Street, City, State, Country",
+    permanentAddress: "456 Avenue, City, State, Country",
+    guardian: {
+      fatherName: "Robert Smith",
+      fatherOccupation: "Engineer",
+      fatherContactNo: "1234567890",
+      motherName: "Jane Smith",
+      motherOccupation: "Doctor",
+      motherContactNo: "0987654321",
+    },
+    localGuardian: {
+      name: "Alice Johnson",
+      occupation: "Teacher",
       contactNo: "1234567890",
-      emergencyContactNo: "0987654321",
-      presentAddress: "123 Street, City, State, Country",
-      permanentAddress: "456 Avenue, City, State, Country",
-
-      guardian: {
-        fatherName: "Robert Smith",
-        fatherOccupation: "Engineer",
-        fatherContactNo: "1234567890",
-        motherName: "Jane Smith",
-        motherOccupation: "Doctor",
-        motherContactNo: "0987654321",
-      },
-      localGuardian: {
-        name: "Alice Johnson",
-        occupation: "Teacher",
-        contactNo: "1234567890",
-        address: "789 Street, City, State, Country",
-      },
-      admissionSemester: "6662d756fd67954d2f594983",
-      academicDepartment: "6662e9bf5b7ca57ef3244733",
+      address: "789 Street, City, State, Country",
     },
   };
+  const [CreateStudent] = useCreateStudentMutation();
 
   const {
     data: departmentData,
@@ -74,21 +67,34 @@ const CreateStudent = () => {
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-
+    const toastId = toast.loading("Creating Student...");
     const formData = new FormData();
 
-    formData.append("data", JSON.stringify(data));
+    const submitData = {
+      password: "password123",
+      student: data,
+    };
+    formData.append("data", JSON.stringify(submitData));
 
-    // for checking console.log(Object.entries(formData));
+    try {
+      const result = await CreateStudent(formData).unwrap();
+      if (result?.success) {
+        toast.success(result?.message, { id: toastId });
+      } else {
+        toast.error(result?.message, { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
     <Row>
       <Col span={24}>
         <OpenForm
+          defaultValues={student}
           onSubmit={onSubmit}
-          resolver={zodResolver(createStudentValidationSchema)}
+          // resolver={zodResolver(createStudentValidationSchema)}
         >
           <Divider>Personal Information</Divider>
           <Row gutter={8}>
@@ -253,7 +259,6 @@ const CreateStudent = () => {
               />
             </Col>
           </Row>
-
           <Button
             type="primary"
             htmlType="submit"

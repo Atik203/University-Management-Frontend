@@ -1,13 +1,31 @@
+import { TQueryParam, TResponseRedux, TStudent } from "../../../types";
 import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     //! Student
     getAllStudents: builder.query({
-      query: () => ({
-        url: `/students`,
-        method: "GET",
-      }),
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((arg: TQueryParam) => {
+            params.append(arg.name, arg.value as string);
+          });
+        }
+
+        return {
+          url: `/students`,
+          method: "GET",
+          params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TStudent[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
       providesTags: ["Student"],
     }),
     createStudent: builder.mutation({

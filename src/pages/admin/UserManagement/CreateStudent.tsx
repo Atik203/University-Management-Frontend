@@ -1,7 +1,9 @@
-import { Button } from "antd";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Col, Row } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
+import { createStudentValidationSchema } from "../../../schemas/userManagement.schema";
 
 const CreateStudent = () => {
   const student = {
@@ -41,18 +43,38 @@ const CreateStudent = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log(data);
+
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(data));
+
+    // for checking console.log(Object.entries(formData));
   };
 
   return (
-    <OpenForm onSubmit={onSubmit}>
-      <OpenInput label="First Name" name="firstName" type="text" />
-      <OpenInput label="Middle Name" name="middleName" type="text" />
-      <OpenInput label="Last Name" name="lastName" type="text" />
-
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </OpenForm>
+    <Row>
+      <Col span={24}>
+        <OpenForm
+          onSubmit={onSubmit}
+          resolver={zodResolver(createStudentValidationSchema)}
+        >
+          <Row gutter={8}>
+            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
+              <OpenInput label="First Name" name="firstName" type="text" />
+            </Col>
+            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
+              <OpenInput label="Middle Name" name="middleName" type="text" />
+            </Col>
+            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
+              <OpenInput label="Last Name" name="lastName" type="text" />
+            </Col>
+          </Row>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </OpenForm>
+      </Col>
+    </Row>
   );
 };
 

@@ -5,10 +5,16 @@ import { Controller } from "react-hook-form";
 export type TSelectProps = {
   label: string;
   name: string;
-  options: { value: string; label: string; disabled?: boolean }[];
+  disabled?: boolean;
+  options: { value: string; label: string; disabled?: boolean }[] | undefined;
 };
 
-const OpenSelect: FC<TSelectProps> = ({ label, name, options }) => {
+const OpenSelect: FC<TSelectProps> = ({
+  label,
+  name,
+  options,
+  disabled = false,
+}) => {
   return (
     <Controller
       name={name}
@@ -22,6 +28,7 @@ const OpenSelect: FC<TSelectProps> = ({ label, name, options }) => {
               fontSize: "16px",
             }}
             size="large"
+            disabled={disabled}
             {...field}
             options={options}
           />

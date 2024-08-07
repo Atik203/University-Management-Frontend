@@ -1,5 +1,5 @@
 import type { TableColumnsType, TableProps } from "antd";
-import { Button, Flex, Pagination, Table } from "antd";
+import { Button, Flex, Modal, Pagination, Table } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
@@ -24,6 +24,7 @@ type TTableData = Pick<
 const StudentData = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: semesterData,
@@ -38,6 +39,17 @@ const StudentData = () => {
 
   const meta = semesterData?.meta;
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   // @ts-expect-error - data is possibly undefined
   const tableData: TTableData[] | undefined = semesterData?.data?.map(
     ({
@@ -98,7 +110,10 @@ const StudentData = () => {
                 Edit
               </Button>
             </Link>
-            <Button style={{ backgroundColor: "red", color: "white" }}>
+            <Button
+              style={{ backgroundColor: "red", color: "white" }}
+              onClick={showModal}
+            >
               Block
             </Button>
           </Flex>
@@ -144,6 +159,16 @@ const StudentData = () => {
         total={meta?.total}
         current={page}
       />
+      <Modal
+        title="Block Student"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        loading={isFetching || isLoading}
+        okText="Yes"
+      >
+        <h4>Are you sure you want to block this student?</h4>
+      </Modal>
     </>
   );
 };

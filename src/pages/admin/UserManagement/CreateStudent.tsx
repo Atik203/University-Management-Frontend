@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Col, Divider, Row } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
 import OpenSelect, { TSelectProps } from "../../../components/form/OpenSelect";
@@ -15,7 +16,6 @@ const bloodGroupSelectOptions = bloodGroupOptions.map((bloodGroup) => ({
   value: bloodGroup,
   label: bloodGroup,
 }));
-
 const genderSelectOptions = genderOptions.map((gender) => ({
   value: gender,
   label: gender,
@@ -113,7 +113,7 @@ const CreateStudent = () => {
               />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput label="Date Of Birth" name="dateOfBirth" type="text" />
+              <OpenDatePicker label="Date of Birth" name="dateOfBirth" />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenSelect
@@ -249,7 +249,15 @@ const CreateStudent = () => {
               />
             </Col>
           </Row>
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            style={{
+              display: "flex",
+              margin: "auto",
+            }}
+          >
             Submit
           </Button>
         </OpenForm>

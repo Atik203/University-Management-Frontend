@@ -3,7 +3,23 @@ import { Button, Col, Divider, Row } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
+import OpenSelect, { TSelectProps } from "../../../components/form/OpenSelect";
+import { bloodGroupOptions, genderOptions } from "../../../constants/global";
+import {
+  useGetAllAcademicDepartmentsQuery,
+  useGetAllSemestersQuery,
+} from "../../../redux/features/admin/academicManagement.api";
 import { createStudentValidationSchema } from "../../../schemas/userManagement.schema";
+
+const bloodGroupSelectOptions = bloodGroupOptions.map((bloodGroup) => ({
+  value: bloodGroup,
+  label: bloodGroup,
+}));
+
+const genderSelectOptions = genderOptions.map((gender) => ({
+  value: gender,
+  label: gender,
+}));
 
 const CreateStudent = () => {
   const student = {
@@ -43,6 +59,18 @@ const CreateStudent = () => {
     },
   };
 
+  const { data: departmentData } = useGetAllAcademicDepartmentsQuery(undefined);
+  const { data: semesterData } = useGetAllSemestersQuery(undefined);
+
+  const academicDepartmentOptions = departmentData?.data?.map((department) => ({
+    value: department._id,
+    label: department.name,
+  }));
+  const academicSemesterOptions = semesterData?.data?.map((semester) => ({
+    value: semester._id,
+    label: semester.name + " " + semester.year,
+  }));
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log(data);
 
@@ -76,15 +104,23 @@ const CreateStudent = () => {
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenInput label="Last Name" name="name.lastName" type="text" />
             </Col>
-            {/* Blood Group,DOB,Genger */}
+            {/* Blood Group,DOB,Gender */}
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput label="Blood Group" name="bloodGroup" type="text" />
+              <OpenSelect
+                label="Blood Group"
+                name="bloodGroup"
+                options={bloodGroupSelectOptions}
+              />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenInput label="Date Of Birth" name="dateOfBirth" type="text" />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput label="Gender" name="gender" type="text" />
+              <OpenSelect
+                label="Gender"
+                name="gender"
+                options={genderSelectOptions}
+              />
             </Col>
 
             {/* Email,Contact No,emergencyContact no */}
@@ -121,7 +157,6 @@ const CreateStudent = () => {
 
             {/* Guardian Information */}
             <Divider>Guardian Information</Divider>
-
             {/* Father Name,Father Occupation,Father Contact No */}
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenInput
@@ -200,17 +235,17 @@ const CreateStudent = () => {
             {/* Admission Semester,Academic Department */}
             <Divider>Academic Information</Divider>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
+              <OpenSelect
                 label="Admission Semester"
                 name="admissionSemester"
-                type="text"
+                options={academicSemesterOptions as TSelectProps["options"]}
               />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
+              <OpenSelect
                 label="Academic Department"
                 name="academicDepartment"
-                type="text"
+                options={academicDepartmentOptions as TSelectProps["options"]}
               />
             </Col>
           </Row>

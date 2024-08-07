@@ -9,6 +9,7 @@ import CreateCourse from "../pages/admin/CreateCourse";
 import CreateAdmin from "../pages/admin/UserManagement/CreateAdmin";
 import CreateFaculty from "../pages/admin/UserManagement/CreateFaculty";
 import CreateStudent from "../pages/admin/UserManagement/CreateStudent";
+import StudentData from "../pages/admin/UserManagement/StudentData";
 
 export const adminPaths = [
   {
@@ -58,6 +59,11 @@ export const adminPaths = [
         name: "Create Student",
         path: "create-student",
         element: <CreateStudent />,
+      },
+      {
+        name: "Students",
+        path: "student-data",
+        element: <StudentData />,
       },
       {
         name: "Create Faculty",

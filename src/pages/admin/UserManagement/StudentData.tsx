@@ -1,24 +1,10 @@
 import type { TableColumnsType, TableProps } from "antd";
 import { Button, Flex, Table } from "antd";
 import { useState } from "react";
-import { monthOptions } from "../../../constants/global";
-import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
-import { TQueryParam } from "../../../types";
-import { TAcademicSemester } from "../../../types/academicManagement.types";
+import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
+import { TQueryParam, TStudent } from "../../../types";
 
-const MonthFilterOptions: { text: string; value: string }[] = [];
-
-for (let i = 1; i <= 12; i++) {
-  MonthFilterOptions.push({
-    text: monthOptions[i - 1].value,
-    value: monthOptions[i - 1].value,
-  });
-}
-
-type TTableData = Pick<
-  TAcademicSemester,
-  "name" | "startMonth" | "endMonth" | "year"
->;
+type TTableData = Pick<TStudent, "name" | "id">;
 
 const StudentData = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
@@ -27,73 +13,64 @@ const StudentData = () => {
     data: semesterData,
     isFetching,
     isLoading,
-  } = useGetAllSemestersQuery(params);
+  } = useGetAllStudentsQuery(params);
 
   const tableData = semesterData?.data?.map(
-    ({ _id, name, startMonth, endMonth, year }) => ({
+    ({
+      _id,
+      fullName,
+      email,
+      academicDepartment,
+      id,
+      academicFaculty,
+      admissionSemester,
+    }) => ({
       key: _id,
-      name,
-      startMonth,
-      endMonth,
-      year,
+      fullName,
+      email,
+      department: academicDepartment.name,
+      faculty: academicFaculty.name,
+      semester: admissionSemester.name + " " + admissionSemester.year,
+      id,
     })
   );
 
   const columns: TableColumnsType<TTableData> = [
     {
       title: "Name",
-      dataIndex: "name",
-      filters: [
-        {
-          text: "Autumn",
-          value: "Autumn",
-        },
-        {
-          text: "Summer",
-          value: "Summer",
-        },
-        {
-          text: "Fall",
-          value: "Fall",
-        },
-      ],
+      dataIndex: "fullName",
     },
     {
-      title: "Start Month",
-      dataIndex: "startMonth",
-      filters: MonthFilterOptions,
+      title: "Email",
+      dataIndex: "email",
     },
     {
-      title: "End Month",
-      dataIndex: "endMonth",
-      filters: MonthFilterOptions,
+      title: "ID No.",
+      dataIndex: "id",
     },
     {
-      title: "Year",
-      dataIndex: "year",
-      filters: [
-        {
-          text: "2024",
-          value: "2024",
-        },
-        {
-          text: "2025",
-          value: "2025",
-        },
-        {
-          text: "2026",
-          value: "2026",
-        },
-      ],
+      title: "Department",
+      dataIndex: "department",
+    },
+    {
+      title: "Faculty",
+      dataIndex: "faculty",
+    },
+    {
+      title: "Semester",
+      dataIndex: "semester",
     },
     {
       title: "Action",
       render: () => {
         return (
-          <Flex justify="center" align="center" gap={5}>
-            <Button type="primary">Edit</Button>
+          <Flex justify="center" align="center" gap={6}>
+            <Button type="primary">Details</Button>
+            <Button type="primary" style={{ backgroundColor: "green" }}>
+              Edit
+            </Button>
             <Button style={{ backgroundColor: "red", color: "white" }}>
-              Delete
+              Block
             </Button>
           </Flex>
         );
@@ -111,18 +88,6 @@ const StudentData = () => {
       const queryParams: TQueryParam[] = [];
       filters.name?.forEach((item) => {
         queryParams.push({ name: "name", value: item as string });
-      });
-
-      filters.year?.forEach((item) => {
-        queryParams.push({ name: "year", value: item as string });
-      });
-
-      filters.startMonth?.forEach((item) => {
-        queryParams.push({ name: "startMonth", value: item as string });
-      });
-
-      filters.endMonth?.forEach((item) => {
-        queryParams.push({ name: "endMonth", value: item as string });
       });
 
       setParams(queryParams);

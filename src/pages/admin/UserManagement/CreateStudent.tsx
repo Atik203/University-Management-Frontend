@@ -1,5 +1,5 @@
-import { Button, Col, Divider, Row } from "antd";
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenForm from "../../../components/form/OpenForm";
@@ -75,6 +75,7 @@ const CreateStudent = () => {
       student: data,
     };
     formData.append("data", JSON.stringify(submitData));
+    formData.append("file", data?.image);
 
     try {
       const result = await CreateStudent(formData).unwrap();
@@ -128,6 +129,24 @@ const CreateStudent = () => {
                 label="Gender"
                 name="gender"
                 options={genderSelectOptions}
+              />
+            </Col>
+
+            {/* Image */}
+            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
+              <Controller
+                name="image"
+                render={({ field: { onChange, value, ...field } }) => (
+                  <Form.Item label="Image">
+                    {" "}
+                    <Input
+                      type="file"
+                      value={value?.fileName}
+                      {...field}
+                      onChange={(e) => onChange(e.target.files?.[0])}
+                    />
+                  </Form.Item>
+                )}
               />
             </Col>
 

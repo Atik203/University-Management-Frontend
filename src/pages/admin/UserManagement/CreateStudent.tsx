@@ -5,21 +5,15 @@ import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenInput from "../../../components/form/OpenInput";
 import OpenSelect from "../../../components/form/OpenSelect";
-import { bloodGroupOptions, genderOptions } from "../../../constants/global";
+import {
+  bloodGroupSelectOptions,
+  genderSelectOptions,
+} from "../../../constants/global";
 import {
   useGetAllAcademicDepartmentsQuery,
   useGetAllSemestersQuery,
 } from "../../../redux/features/admin/academicManagement.api";
 import { createStudentValidationSchema } from "../../../schemas/userManagement.schema";
-
-const bloodGroupSelectOptions = bloodGroupOptions.map((bloodGroup) => ({
-  value: bloodGroup,
-  label: bloodGroup,
-}));
-const genderSelectOptions = genderOptions.map((gender) => ({
-  value: gender,
-  label: gender,
-}));
 
 const CreateStudent = () => {
   const student = {

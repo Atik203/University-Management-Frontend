@@ -30,3 +30,11 @@ export const bloodGroupOptions = [
   "O+",
   "O-",
 ];
+export const bloodGroupSelectOptions = bloodGroupOptions.map((bloodGroup) => ({
+  value: bloodGroup,
+  label: bloodGroup,
+}));
+export const genderSelectOptions = genderOptions.map((gender) => ({
+  value: gender,
+  label: gender,
+}));

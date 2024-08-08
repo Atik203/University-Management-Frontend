@@ -115,6 +115,7 @@ const FacultyData = () => {
               onClick={showModal}
             >
               Block
+              {item}
             </Button>
           </Flex>
         );

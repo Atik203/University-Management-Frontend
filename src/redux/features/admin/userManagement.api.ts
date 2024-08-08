@@ -129,8 +129,11 @@ const userManagementApi = baseApi.injectEndpoints({
       query: (body) => ({
         url: `/users/change-status/${body.id}`,
         method: "POST",
-        body,
+        body: {
+          status: body.status,
+        },
       }),
+      invalidatesTags: ["Student", "Admin", "Faculty"],
     }),
   }),
 });

@@ -7,6 +7,7 @@ import {
   useChangeStatusMutation,
   useGetAllAdminsQuery,
 } from "../../../redux/features/admin/userManagement.api";
+import { useAppSelector } from "../../../redux/hooks";
 import { TAdmin, TQueryParam } from "../../../types";
 
 type TTableData = Pick<TAdmin, "name" | "id" | "fullName" | "designation"> & {
@@ -20,6 +21,8 @@ const AdminData = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBlock, setIsBlock] = useState(false);
   const [id, setId] = useState<string | null>(null);
+  const currentUser = useAppSelector((state) => state.auth.user);
+  console.log(currentUser);
 
   const [ChangeStatus] = useChangeStatusMutation();
 
@@ -106,12 +109,19 @@ const AdminData = () => {
                 Edit
               </Button>
             </Link>
-            <Button
-              style={{ backgroundColor: "red", color: "white" }}
-              onClick={() => showModal(item?.user._id)}
-            >
-              {item?.user.status}
-            </Button>
+            {currentUser?.id != item?.user.id ? (
+              <Button
+                style={{ backgroundColor: "red", color: "white" }}
+                onClick={() => showModal(item?.user._id)}
+              >
+                {item?.user.status}
+              </Button>
+            ) : (
+              <Button type="primary" disabled>
+                {" "}
+                Current User{" "}
+              </Button>
+            )}
           </Flex>
         );
       },

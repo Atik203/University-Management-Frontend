@@ -2,7 +2,11 @@ import type { TableColumnsType, TableProps } from "antd";
 import { Button, Flex, Modal, Pagination, Table } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
+import { toast } from "sonner";
+import {
+  useChangeStatusMutation,
+  useGetAllStudentsQuery,
+} from "../../../redux/features/admin/userManagement.api";
 import { TQueryParam, TStudent } from "../../../types";
 
 type TTableData = Pick<
@@ -25,9 +29,13 @@ const StudentData = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBlock, setIsBlock] = useState(false);
+  const [id, setId] = useState<string | null>(null);
+
+  const [ChangeStatus] = useChangeStatusMutation();
 
   const {
-    data: semesterData,
+    data: studentData,
     isFetching,
     isLoading,
   } = useGetAllStudentsQuery([
@@ -37,13 +45,29 @@ const StudentData = () => {
     { name: "sort", value: "id" },
   ]);
 
-  const meta = semesterData?.meta;
+  const meta = studentData?.meta;
 
-  const showModal = () => {
+  const showModal = (Id: string) => {
     setIsModalOpen(true);
+    setId(Id);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    const toastId = toast.loading(`${isBlock ? "Unblocking" : "Blocking"}...`);
+    const status = isBlock ? "in-progress" : "blocked";
+    try {
+      const result = await ChangeStatus({ id, status }).unwrap();
+      if (result.success) {
+        toast.success(`${isBlock ? "Unblocked" : "Blocked"} Successfully`, {
+          id: toastId,
+        });
+        setIsBlock(!isBlock);
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Something went wrong", { id: toastId });
+    }
     setIsModalOpen(false);
   };
 
@@ -51,7 +75,7 @@ const StudentData = () => {
     setIsModalOpen(false);
   };
   // @ts-expect-error - data is possibly undefined
-  const tableData: TTableData[] | undefined = semesterData?.data?.map(
+  const tableData: TTableData[] | undefined = studentData?.data?.map(
     ({
       _id,
       fullName,
@@ -60,6 +84,7 @@ const StudentData = () => {
       id,
       academicFaculty,
       admissionSemester,
+      user,
     }) => ({
       key: _id,
       fullName,
@@ -68,6 +93,7 @@ const StudentData = () => {
       faculty: academicFaculty.name,
       semester: admissionSemester.name + " " + admissionSemester.year,
       id,
+      user,
     })
   );
 
@@ -112,9 +138,9 @@ const StudentData = () => {
             </Link>
             <Button
               style={{ backgroundColor: "red", color: "white" }}
-              onClick={showModal}
+              onClick={() => showModal(item?.user._id)}
             >
-              Block
+              {item?.user.status}
             </Button>
           </Flex>
         );

@@ -65,21 +65,10 @@ const AdminData = () => {
   };
   // @ts-expect-error - data is possibly undefined
   const tableData: TTableData[] | undefined = facultyData?.data?.map(
-    ({
-      _id,
-      fullName,
-      email,
-      academicDepartment,
-      id,
-      academicFaculty,
-      designation,
-      user,
-    }) => ({
+    ({ _id, fullName, email, id, designation, user }) => ({
       key: _id,
       fullName,
       email,
-      department: academicDepartment.name,
-      faculty: academicFaculty.name,
       id,
       designation,
       user,
@@ -98,14 +87,6 @@ const AdminData = () => {
     {
       title: "ID No.",
       dataIndex: "id",
-    },
-    {
-      title: "Department",
-      dataIndex: "department",
-    },
-    {
-      title: "Faculty",
-      dataIndex: "faculty",
     },
     {
       title: "Designation",

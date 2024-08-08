@@ -1,4 +1,5 @@
 import {
+  TAdmin,
   TFaculty,
   TQueryParam,
   TResponseRedux,
@@ -95,11 +96,22 @@ const userManagementApi = baseApi.injectEndpoints({
 
     //! Admin
     getAllAdmins: builder.query({
-      query: () => ({
-        url: `/admin`,
-        method: "GET",
-      }),
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((arg: TQueryParam) => {
+            params.append(arg.name, arg.value as string);
+          });
+        }
+        return { url: `/admin`, method: "GET", params };
+      },
       providesTags: ["Admin"],
+      transformResponse: (response: TResponseRedux<TAdmin[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
     getSingleAdmin: builder.query({
       query: (id: string) => ({

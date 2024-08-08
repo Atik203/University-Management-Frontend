@@ -10,7 +10,7 @@ import {
   genderSelectOptions,
 } from "../../../constants/global";
 import { useGetAllAcademicDepartmentsQuery } from "../../../redux/features/admin/academicManagement.api";
-import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement.api";
+import { useCreateFacultyMutation } from "../../../redux/features/admin/userManagement.api";
 
 const CreateFaculty = () => {
   const faculty = {
@@ -21,7 +21,7 @@ const CreateFaculty = () => {
     },
     designation: "Professor",
     gender: "male",
-    email: "john01@example.com",
+    email: "john1@example.com",
     contactNo: "1234567890",
     emergencyContactNo: "0987654321",
     bloodGroup: "A+",
@@ -29,7 +29,7 @@ const CreateFaculty = () => {
     permanentAddress: "456 Avenue, City, State, Country",
   };
 
-  const [CreateStudent] = useCreateStudentMutation();
+  const [CreateFaculty] = useCreateFacultyMutation();
 
   const {
     data: departmentData,
@@ -43,18 +43,18 @@ const CreateFaculty = () => {
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating Student...");
+    const toastId = toast.loading("Creating Faculty...");
     const formData = new FormData();
 
     const submitData = {
       password: "password123",
-      student: data,
+      faculty: data,
     };
     formData.append("data", JSON.stringify(submitData));
     formData.append("file", data?.image);
 
     try {
-      const result = await CreateStudent(formData).unwrap();
+      const result = await CreateFaculty(formData).unwrap();
       if (result?.success) {
         toast.success(result?.message, { id: toastId });
       } else {

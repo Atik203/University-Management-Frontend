@@ -6,11 +6,17 @@ import CreateAcademicFaculty from "../pages/admin/AcademicManagement/CreateAcade
 import CreateAcademicSemester from "../pages/admin/AcademicManagement/CreateAcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import CreateCourse from "../pages/admin/CreateCourse";
+import AdminData from "../pages/admin/UserManagement/AdminData";
+import AdminDetails from "../pages/admin/UserManagement/AdminDetails";
 import CreateAdmin from "../pages/admin/UserManagement/CreateAdmin";
 import CreateFaculty from "../pages/admin/UserManagement/CreateFaculty";
 import CreateStudent from "../pages/admin/UserManagement/CreateStudent";
+import FacultyData from "../pages/admin/UserManagement/FacultyData";
+import FacultyDetails from "../pages/admin/UserManagement/FacultyDetails";
 import StudentData from "../pages/admin/UserManagement/StudentData";
 import StudentDetails from "../pages/admin/UserManagement/StudentDetails";
+import UpdateAdmin from "../pages/admin/UserManagement/UpdateAdmin";
+import UpdateFaculty from "../pages/admin/UserManagement/UpdateFaculty";
 import UpdateStudent from "../pages/admin/UserManagement/UpdateStudent";
 
 export const adminPaths = [
@@ -81,9 +87,35 @@ export const adminPaths = [
         element: <CreateFaculty />,
       },
       {
+        name: "Faculties",
+        path: "faculty-data",
+        element: <FacultyData />,
+      },
+      {
+        path: "faculty-data/update/:id",
+        element: <UpdateFaculty />,
+      },
+      {
+        path: "faculty-data/:id",
+        element: <FacultyDetails />,
+      },
+      {
         name: "Create Admin",
         path: "create-admin",
         element: <CreateAdmin />,
+      },
+      {
+        name: "Admins",
+        path: "admin-data",
+        element: <AdminData />,
+      },
+      {
+        path: "admin-data/:id",
+        element: <AdminDetails />,
+      },
+      {
+        path: "admin-data/update/:id",
+        element: <UpdateAdmin />,
       },
     ],
   },

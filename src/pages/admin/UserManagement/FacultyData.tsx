@@ -2,7 +2,11 @@ import type { TableColumnsType, TableProps } from "antd";
 import { Button, Flex, Modal, Pagination, Table } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
+import { toast } from "sonner";
+import {
+  useChangeStatusMutation,
+  useGetAllFacultiesQuery,
+} from "../../../redux/features/admin/userManagement.api";
 import { TFaculty, TQueryParam } from "../../../types";
 
 type TTableData = Pick<
@@ -25,6 +29,10 @@ const FacultyData = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBlock, setIsBlock] = useState(false);
+  const [id, setId] = useState<string | null>(null);
+
+  const [ChangeStatus] = useChangeStatusMutation();
 
   const {
     data: facultyData,
@@ -39,11 +47,27 @@ const FacultyData = () => {
 
   const meta = facultyData?.meta;
 
-  const showModal = () => {
+  const showModal = (Id: string) => {
     setIsModalOpen(true);
+    setId(Id);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    const toastId = toast.loading(`${isBlock ? "Unblocking" : "Blocking"}...`);
+    const status = isBlock ? "in-progress" : "blocked";
+    try {
+      const result = await ChangeStatus({ id, status }).unwrap();
+      if (result.success) {
+        toast.success(`${isBlock ? "Unblocked" : "Blocked"} Successfully`, {
+          id: toastId,
+        });
+        setIsBlock(!isBlock);
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Something went wrong", { id: toastId });
+    }
     setIsModalOpen(false);
   };
 
@@ -60,6 +84,7 @@ const FacultyData = () => {
       id,
       academicFaculty,
       designation,
+      user,
     }) => ({
       key: _id,
       fullName,
@@ -68,6 +93,7 @@ const FacultyData = () => {
       faculty: academicFaculty.name,
       id,
       designation,
+      user,
     })
   );
 
@@ -112,10 +138,9 @@ const FacultyData = () => {
             </Link>
             <Button
               style={{ backgroundColor: "red", color: "white" }}
-              onClick={showModal}
+              onClick={() => showModal(item?.user._id)}
             >
-              Block
-              {item}
+              {item?.user.status}
             </Button>
           </Flex>
         );

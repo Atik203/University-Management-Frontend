@@ -20,7 +20,7 @@ const CreateAdmin = () => {
     },
     designation: "Head of Department",
     gender: "male",
-    email: "hosansaddam@gmail.com",
+    email: "admin1@gmail.com",
     contactNo: "1234567890",
     emergencyContactNo: "0987654321",
     bloodGroup: "A+",
@@ -36,7 +36,7 @@ const CreateAdmin = () => {
 
     const submitData = {
       password: "password123",
-      faculty: data,
+      admin: data,
     };
     formData.append("data", JSON.stringify(submitData));
     formData.append("file", data?.image);

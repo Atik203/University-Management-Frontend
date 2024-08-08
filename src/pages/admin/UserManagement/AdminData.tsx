@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import {
   useChangeStatusMutation,
-  useGetAllFacultiesQuery,
+  useGetAllAdminsQuery,
 } from "../../../redux/features/admin/userManagement.api";
 import { TAdmin, TQueryParam } from "../../../types";
 
@@ -24,17 +24,17 @@ const AdminData = () => {
   const [ChangeStatus] = useChangeStatusMutation();
 
   const {
-    data: facultyData,
+    data: adminData,
     isFetching,
     isLoading,
-  } = useGetAllFacultiesQuery([
+  } = useGetAllAdminsQuery([
     ...params,
     { name: "limit", value: "2" },
     { name: "page", value: page.toString() },
     { name: "sort", value: "id" },
   ]);
 
-  const meta = facultyData?.meta;
+  const meta = adminData?.meta;
 
   const showModal = (Id: string) => {
     setIsModalOpen(true);
@@ -64,7 +64,7 @@ const AdminData = () => {
     setIsModalOpen(false);
   };
   // @ts-expect-error - data is possibly undefined
-  const tableData: TTableData[] | undefined = facultyData?.data?.map(
+  const tableData: TTableData[] | undefined = adminData?.data?.map(
     ({ _id, fullName, email, id, designation, user }) => ({
       key: _id,
       fullName,

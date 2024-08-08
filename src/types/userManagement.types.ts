@@ -43,12 +43,12 @@ export type TStudent = {
   user: TUser;
   password: string;
   name: TUserName;
-  gender: "male" | "female" | "other";
+  gender: TGender;
   dateOfBirth?: string;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  bloodGroup?: TBloodGroup;
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
@@ -60,5 +60,60 @@ export type TStudent = {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+  fullName: string;
+};
+
+export type TGender = "male" | "female" | "other";
+export type TBloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "AB+"
+  | "AB-"
+  | "O+"
+  | "O-";
+
+export type TFaculty = {
+  _id: string;
+  id: string;
+  user: TUser;
+  designation: string;
+  name: TUserName;
+  gender: TGender;
+  dateOfBirth?: Date;
+  email: string;
+  contactNo: string;
+  emergencyContactNo: string;
+  bloodGroup?: TBloodGroup;
+  presentAddress: string;
+  permanentAddress: string;
+  profileImg?: string;
+  academicDepartment: TAcademicDepartment;
+  academicFaculty: TAcademicFaculty;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  fullName: string;
+};
+
+export type TAdmin = {
+  _id: string;
+  id: string;
+  user: TUser;
+  designation: string;
+  name: TUserName;
+  gender: TGender;
+  dateOfBirth?: Date;
+  email: string;
+  contactNo: string;
+  emergencyContactNo: string;
+  bloodGroup?: TBloodGroup;
+  presentAddress: string;
+  permanentAddress: string;
+  profileImg?: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
   fullName: string;
 };

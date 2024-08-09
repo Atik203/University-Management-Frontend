@@ -6,6 +6,8 @@ import OpenForm from "../../../../components/form/OpenForm";
 import OpenInput from "../../../../components/form/OpenInput";
 import OpenSelect from "../../../../components/form/OpenSelect";
 
+import moment from "moment";
+import { useParams } from "react-router-dom";
 import {
   bloodGroupSelectOptions,
   genderSelectOptions,
@@ -14,38 +16,39 @@ import {
   useGetAllAcademicDepartmentsQuery,
   useGetAllSemestersQuery,
 } from "../../../../redux/features/admin/academicManagement.api";
-import { useCreateStudentMutation } from "../../../../redux/features/admin/userManagement.api";
+import {
+  useGetSingleStudentQuery,
+  useUpdateStudentMutation,
+} from "../../../../redux/features/admin/userManagement.api";
+import { TStudent } from "../../../../types";
 
 const UpdateStudent = () => {
-  const student = {
-    name: {
-      firstName: "John",
-      middleName: "Doe",
-      lastName: "Smith",
-    },
-    gender: "male",
-    bloodGroup: "A+",
-    email: "johndone2@gmail.com",
-    contactNo: "1234567890",
-    emergencyContactNo: "0987654321",
-    presentAddress: "123 Street, City, State, Country",
-    permanentAddress: "456 Avenue, City, State, Country",
-    guardian: {
-      fatherName: "Robert Smith",
-      fatherOccupation: "Engineer",
-      fatherContactNo: "1234567890",
-      motherName: "Jane Smith",
-      motherOccupation: "Doctor",
-      motherContactNo: "0987654321",
-    },
-    localGuardian: {
-      name: "Alice Johnson",
-      occupation: "Teacher",
-      contactNo: "1234567890",
-      address: "789 Street, City, State, Country",
-    },
-  };
-  const [CreateStudent] = useCreateStudentMutation();
+  const { id } = useParams<{ id: string }>();
+
+  const { data, isFetching, isLoading } = useGetSingleStudentQuery(
+    id as string
+  );
+
+  const studentData = data?.data as TStudent;
+
+  let defaultData = {};
+
+  if (studentData) {
+    const {
+      academicDepartment,
+      admissionSemester,
+      dateOfBirth,
+      ...remainingData
+    } = studentData;
+    defaultData = {
+      ...remainingData,
+      academicDepartment: academicDepartment?._id,
+      admissionSemester: admissionSemester?._id,
+      dateOfBirth: moment(dateOfBirth),
+    };
+  }
+
+  const [UpdateStudent] = useUpdateStudentMutation();
 
   const {
     data: departmentData,
@@ -68,18 +71,22 @@ const UpdateStudent = () => {
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating Student...");
+    const toastId = toast.loading("Updating Student...");
     const formData = new FormData();
 
     const submitData = {
-      password: "password123",
       student: data,
     };
     formData.append("data", JSON.stringify(submitData));
     formData.append("file", data?.image);
 
     try {
-      const result = await CreateStudent(formData).unwrap();
+      const data = {
+        id: studentData.id,
+        body: formData,
+      };
+
+      const result = await UpdateStudent(data).unwrap();
       if (result?.success) {
         toast.success(result?.message, { id: toastId });
       } else {
@@ -89,12 +96,12 @@ const UpdateStudent = () => {
       toast.error("Something went wrong");
     }
   };
-
+  if (isLoading || isFetching) return <p>Loading...</p>;
   return (
     <Row>
       <Col span={24}>
         <OpenForm
-          defaultValues={student}
+          defaultValues={defaultData}
           onSubmit={onSubmit}
           // resolver={zodResolver(createStudentValidationSchema)}
         >

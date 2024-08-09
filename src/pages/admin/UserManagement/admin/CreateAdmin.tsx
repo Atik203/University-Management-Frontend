@@ -1,15 +1,15 @@
 import { Button, Col, Divider, Form, Input, Row } from "antd";
 import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import OpenDatePicker from "../../../components/form/OpenDatePicker";
-import OpenForm from "../../../components/form/OpenForm";
-import OpenInput from "../../../components/form/OpenInput";
-import OpenSelect from "../../../components/form/OpenSelect";
+import OpenDatePicker from "../../../../components/form/OpenDatePicker";
+import OpenForm from "../../../../components/form/OpenForm";
+import OpenInput from "../../../../components/form/OpenInput";
+import OpenSelect from "../../../../components/form/OpenSelect";
 import {
   bloodGroupSelectOptions,
   genderSelectOptions,
-} from "../../../constants/global";
-import { useCreateAdminMutation } from "../../../redux/features/admin/userManagement.api";
+} from "../../../../constants/global";
+import { useCreateAdminMutation } from "../../../../redux/features/admin/userManagement.api";
 
 const CreateAdmin = () => {
   const admin = {

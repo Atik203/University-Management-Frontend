@@ -5,6 +5,11 @@ import OpenDatePicker from "../../../../components/form/OpenDatePicker";
 import OpenForm from "../../../../components/form/OpenForm";
 import OpenInput from "../../../../components/form/OpenInput";
 import OpenSelect from "../../../../components/form/OpenSelect";
+
+import {
+  bloodGroupSelectOptions,
+  genderSelectOptions,
+} from "../../../../constants/global";
 import {
   useGetAllAcademicDepartmentsQuery,
   useGetAllSemestersQuery,

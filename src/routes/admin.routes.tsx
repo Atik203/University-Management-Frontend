@@ -9,15 +9,15 @@ import CreateCourse from "../pages/admin/CreateCourse";
 import AdminData from "../pages/admin/UserManagement/admin/AdminData";
 import AdminDetails from "../pages/admin/UserManagement/admin/AdminDetails";
 import CreateAdmin from "../pages/admin/UserManagement/admin/CreateAdmin";
+import UpdateAdmin from "../pages/admin/UserManagement/admin/UpdateAdmin";
 import CreateFaculty from "../pages/admin/UserManagement/faculty/CreateFaculty";
 import FacultyData from "../pages/admin/UserManagement/faculty/FacultyData";
 import FacultyDetails from "../pages/admin/UserManagement/faculty/FacultyDetails";
+import UpdateFaculty from "../pages/admin/UserManagement/faculty/UpdateFaculty";
 import CreateStudent from "../pages/admin/UserManagement/student/CreateStudent";
 import StudentData from "../pages/admin/UserManagement/student/StudentData";
 import StudentDetails from "../pages/admin/UserManagement/student/StudentDetails";
-import UpdateAdmin from "../pages/admin/UserManagement/UpdateAdmin";
-import UpdateFaculty from "../pages/admin/UserManagement/UpdateFaculty";
-import UpdateStudent from "../pages/admin/UserManagement/UpdateStudent";
+import UpdateStudent from "../pages/admin/UserManagement/student/UpdateStudent";
 
 export const adminPaths = [
   {

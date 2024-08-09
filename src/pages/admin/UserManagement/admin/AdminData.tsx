@@ -6,9 +6,9 @@ import { toast } from "sonner";
 import {
   useChangeStatusMutation,
   useGetAllAdminsQuery,
-} from "../../../redux/features/admin/userManagement.api";
-import { useAppSelector } from "../../../redux/hooks";
-import { TAdmin, TQueryParam } from "../../../types";
+} from "../../../../redux/features/admin/userManagement.api";
+import { useAppSelector } from "../../../../redux/hooks";
+import { TAdmin, TQueryParam } from "../../../../types";
 
 type TTableData = Pick<TAdmin, "name" | "id" | "fullName" | "designation"> & {
   key: string;

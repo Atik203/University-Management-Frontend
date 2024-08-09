@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import {
   useChangeStatusMutation,
   useGetAllStudentsQuery,
-} from "../../../redux/features/admin/userManagement.api";
-import { TQueryParam, TStudent } from "../../../types";
+} from "../../../../redux/features/admin/userManagement.api";
+import { TQueryParam, TStudent } from "../../../../types";
 
 type TTableData = Pick<
   TStudent,

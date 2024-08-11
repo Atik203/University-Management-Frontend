@@ -67,7 +67,6 @@ const UpdateFaculty = () => {
         id: facultyData.id,
         body: formData,
       };
-
       const result = await UpdateFaculty(data).unwrap();
       if (result?.success) {
         toast.success(result?.message, { id: toastId });

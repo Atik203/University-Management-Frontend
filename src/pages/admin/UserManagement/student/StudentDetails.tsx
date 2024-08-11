@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useGetSingleStudentQuery } from "../../../../redux/features/admin/userManagement.api";
 import { TStudent } from "../../../../types";
@@ -46,7 +47,8 @@ const StudentDetails = () => {
         <strong>Gender:</strong> {student.gender}
       </p>
       <p>
-        <strong>Date of Birth:</strong> {student.dateOfBirth}
+        <strong>Date of Birth:</strong>{" "}
+        {moment(student.dateOfBirth).format("YYYY-MM-DD")}
       </p>
       <p>
         <strong>Present Address:</strong> {student.presentAddress}
@@ -62,7 +64,8 @@ const StudentDetails = () => {
         <strong>Local Guardian:</strong> {student.localGuardian.name}
       </p>
       <p>
-        <strong>Admission Semester:</strong> {student.admissionSemester.name}
+        <strong>Admission Semester:</strong> {student.admissionSemester.name}{" "}
+        {student.admissionSemester.year}
       </p>
       <p>
         <strong>Academic Department:</strong> {student.academicDepartment.name}

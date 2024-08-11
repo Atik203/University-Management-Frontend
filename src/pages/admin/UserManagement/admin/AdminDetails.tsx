@@ -6,7 +6,7 @@ import { TAdmin } from "../../../../types";
 const AdminDetails = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isFetching, isLoading } = useGetSingleAdminQuery(id);
+  const { data, isFetching, isLoading } = useGetSingleAdminQuery(id as string);
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>;

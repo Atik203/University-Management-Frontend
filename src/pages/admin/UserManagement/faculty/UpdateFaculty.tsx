@@ -116,8 +116,10 @@ const UpdateFaculty = () => {
                 name="gender"
                 options={genderSelectOptions}
               />
+            </Col>{" "}
+            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
+              <OpenInput label="Designation" name="designation" type="text" />
             </Col>
-
             {/* Image */}
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <Controller
@@ -135,7 +137,6 @@ const UpdateFaculty = () => {
                 )}
               />
             </Col>
-
             {/* Email,Contact No,emergencyContact no */}
             <Divider>Contact Information</Divider>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
@@ -151,7 +152,6 @@ const UpdateFaculty = () => {
                 type="text"
               />
             </Col>
-
             {/* Present Address,Permanent Address */}
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenInput
@@ -167,94 +167,8 @@ const UpdateFaculty = () => {
                 type="text"
               />
             </Col>
-
-            {/* Guardian Information */}
-            <Divider>Guardian Information</Divider>
-            {/* Father Name,Father Occupation,Father Contact No */}
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Father Name"
-                name="guardian.fatherName"
-                type="text"
-              />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Father Occupation"
-                name="guardian.fatherOccupation"
-                type="text"
-              />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Father Contact No"
-                name="guardian.fatherContactNo"
-                type="text"
-              />
-            </Col>
-
-            {/* Mother Name,Mother Occupation,Mother Contact No */}
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Mother Name"
-                name="guardian.motherName"
-                type="text"
-              />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Mother Occupation"
-                name="guardian.motherOccupation"
-                type="text"
-              />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Mother Contact No"
-                name="guardian.motherContactNo"
-                type="text"
-              />
-            </Col>
-
-            {/* Local Guardian Information */}
-            <Divider>Local Guardian Information</Divider>
-            {/* Name,Occupation,Contact No */}
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput label="Name" name="localGuardian.name" type="text" />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Occupation"
-                name="localGuardian.occupation"
-                type="text"
-              />
-            </Col>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Contact No"
-                name="localGuardian.contactNo"
-                type="text"
-              />
-            </Col>
-            {/* Address */}
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenInput
-                label="Address"
-                name="localGuardian.address"
-                type="text"
-              />
-            </Col>
-
-            {/* Admission Semester,Academic Department */}
+            {/* Academic Department */}
             <Divider>Academic Information</Divider>
-            <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              <OpenSelect
-                label="Admission Semester"
-                name="admissionSemester"
-                options={academicSemesterOptions}
-                disabled={isSemesterFetching || isSemesterLoading}
-              />
-            </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
               <OpenSelect
                 label="Academic Department"

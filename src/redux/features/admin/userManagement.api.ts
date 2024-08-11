@@ -105,11 +105,13 @@ const userManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["Faculty"],
     }),
     updateFaculty: builder.mutation({
-      query: ({ body, id }) => ({
-        url: `/faculties/${id}`,
-        method: "PATCH",
-        body,
-      }),
+      query: ({ body, id }) => {
+        return {
+          url: `/faculties/${id}`,
+          method: "PATCH",
+          body,
+        };
+      },
       invalidatesTags: ["Faculty"],
     }),
 

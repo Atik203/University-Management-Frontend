@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useGetSingleFacultyQuery } from "../../../../redux/features/admin/userManagement.api";
 import { TFaculty } from "../../../../types";
@@ -47,7 +48,7 @@ const FacultyDetails = () => {
       </p>
       <p>
         <strong>Date of Birth:</strong>{" "}
-        {faculty.dateOfBirth?.toLocaleDateString()}
+        {moment(faculty.dateOfBirth).format("YYYY-MM-DD")}
       </p>
       <p>
         <strong>Present Address:</strong> {faculty.presentAddress}

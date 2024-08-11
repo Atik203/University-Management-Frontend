@@ -105,10 +105,10 @@ const userManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["Faculty"],
     }),
     updateFaculty: builder.mutation({
-      query: (body) => ({
-        url: `/faculties/${body.id}`,
+      query: ({ body, id }) => ({
+        url: `/faculties/${id}`,
         method: "PATCH",
-        body: body.data,
+        body,
       }),
       invalidatesTags: ["Faculty"],
     }),
@@ -148,10 +148,10 @@ const userManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["Admin"],
     }),
     updateAdmin: builder.mutation({
-      query: (body) => ({
-        url: `/admin/${body.id}`,
+      query: ({ body, id }) => ({
+        url: `/admin/${id}`,
         method: "PATCH",
-        body: body.data,
+        body,
       }),
       invalidatesTags: ["Admin"],
     }),

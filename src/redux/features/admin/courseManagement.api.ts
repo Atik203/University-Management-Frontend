@@ -77,7 +77,9 @@ const courseManagementApi = baseApi.injectEndpoints({
         url: "/semester-registration",
         method: "GET",
       }),
-      transformResponse: (response: TResponseRedux<TSemesterRegistration>) => {
+      transformResponse: (
+        response: TResponseRedux<TSemesterRegistration[]>
+      ) => {
         return {
           data: response?.data,
           meta: response?.meta,

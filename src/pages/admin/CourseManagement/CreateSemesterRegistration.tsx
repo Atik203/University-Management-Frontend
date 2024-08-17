@@ -1,18 +1,25 @@
 import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
 import { toast } from "sonner";
+import OpenDatePicker from "../../../components/form/OpenDatePicker";
+import OpenInput from "../../../components/form/OpenInput";
 import OpenSelect from "../../../components/form/OpenSelect";
-import { nameOptions } from "../../../constants/semester";
+import { nameOptions, statusOptions } from "../../../constants/semester";
 import {
-  useAddAcademicSemesterMutation,
+  useAddAcademicSemesterMutation as useCreateSemesterRegistrationMutation,
   useGetAllSemestersQuery,
 } from "../../../redux/features/admin/academicManagement.api";
 import OpenForm from "./../../../components/form/OpenForm";
 
 const CreateSemesterRegistration = () => {
-  const [AddAcademicSemester] = useAddAcademicSemesterMutation();
+  const [CreateSemesterRegistration] = useCreateSemesterRegistrationMutation();
 
-  const { data, isFetching, isLoading } = useGetAllSemestersQuery(undefined);
+  const { data, isFetching, isLoading } = useGetAllSemestersQuery([
+    {
+      name: "sort",
+      value: "year",
+    },
+  ]);
 
   const semesters = data?.data;
 
@@ -33,7 +40,7 @@ const CreateSemesterRegistration = () => {
         startMonth: data.startMonth,
         endMonth: data.endMonth,
       };
-      const result = await AddAcademicSemester(semesterData).unwrap();
+      const result = await CreateSemesterRegistration(semesterData).unwrap();
       if (result.success) {
         toast.success(result?.message, {
           id: toastId,
@@ -55,6 +62,11 @@ const CreateSemesterRegistration = () => {
             name="academicSemester"
             options={semesterOptions}
           />
+          <OpenSelect label="Status" name="status" options={statusOptions} />
+          <OpenDatePicker label="Start Date" name="startDate" />
+          <OpenDatePicker label="End Date" name="endDate" />
+          <OpenInput label="Minimum Credit" name="minCredit" type="text" />
+          <OpenInput label="Maximum Credit" name="maxCredit" type="text" />
 
           <Button type="primary" htmlType="submit">
             Submit

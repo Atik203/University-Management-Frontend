@@ -4,11 +4,9 @@ import { toast } from "sonner";
 import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenInput from "../../../components/form/OpenInput";
 import OpenSelect from "../../../components/form/OpenSelect";
-import { nameOptions, statusOptions } from "../../../constants/semester";
-import {
-  useAddAcademicSemesterMutation as useCreateSemesterRegistrationMutation,
-  useGetAllSemestersQuery,
-} from "../../../redux/features/admin/academicManagement.api";
+import { statusOptions } from "../../../constants/semester";
+import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useCreateSemesterRegistrationMutation } from "../../../redux/features/admin/courseManagement.api";
 import OpenForm from "./../../../components/form/OpenForm";
 
 const CreateSemesterRegistration = () => {
@@ -32,13 +30,10 @@ const CreateSemesterRegistration = () => {
     const toastId = toast.loading("Creating academic semester...");
 
     try {
-      const name = nameOptions[Number(data?.name) - 1].label;
       const semesterData = {
-        name,
-        code: data.name,
-        year: data.year,
-        startMonth: data.startMonth,
-        endMonth: data.endMonth,
+        ...data,
+        minCredit: Number(data.minCredit),
+        maxCredit: Number(data.maxCredit),
       };
       const result = await CreateSemesterRegistration(semesterData).unwrap();
       if (result.success) {

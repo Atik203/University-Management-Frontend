@@ -71,6 +71,27 @@ const courseManagementApi = baseApi.injectEndpoints({
     //! Offered Course
 
     //! Semester Registration
+    getAllSemesterRegistrations: builder.query({
+      query: () => ({
+        url: "/semester-registration",
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      providesTags: ["SemesterRegistration"],
+    }),
+    createSemesterRegistration: builder.mutation({
+      query: (data) => ({
+        url: "/semester-registration/create-semester-registration",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["SemesterRegistration"],
+    }),
   }),
 });
 
@@ -82,4 +103,6 @@ export const {
   useAssignFacultiesMutation,
   useRemoveFacultiesMutation,
   useGetCourseFacultiesQuery,
+  useGetAllSemesterRegistrationsQuery,
+  useCreateSemesterRegistrationMutation,
 } = courseManagementApi;

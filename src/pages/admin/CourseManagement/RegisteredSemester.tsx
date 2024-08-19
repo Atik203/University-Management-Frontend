@@ -9,8 +9,12 @@ import {
 import moment from "moment";
 import { MenuClickEventHandler, MenuInfo } from "rc-menu/lib/interface";
 import { useState } from "react";
+import { toast } from "sonner";
 import { monthOptions } from "../../../constants/global";
-import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/admin/courseManagement.api";
+import {
+  useGetAllSemesterRegistrationsQuery,
+  useUpdateSemesterRegistrationMutation,
+} from "../../../redux/features/admin/courseManagement.api";
 import { TQueryParam, TSemesterRegistration } from "../../../types";
 const MonthFilterOptions: { text: string; value: string }[] = [];
 
@@ -48,12 +52,14 @@ type TTableData = Pick<
 
 const RegisteredCourse = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
+  const [semesterId, setSemesterId] = useState("");
 
   const {
     data: semesterRegistrationData,
     isFetching,
     isLoading,
   } = useGetAllSemesterRegistrationsQuery(params);
+  const [ChangeStatus] = useUpdateSemesterRegistrationMutation();
 
   const tableData = semesterRegistrationData?.data?.map(
     ({
@@ -75,8 +81,26 @@ const RegisteredCourse = () => {
     })
   );
 
-  const handleStatusChange = (key: MenuInfo) => {
-    console.log(key);
+  const handleStatusChange = async (data: MenuInfo) => {
+    const toastId = toast.loading("Changing Status...");
+
+    const submitData = {
+      id: semesterId,
+      body: {
+        status: data.key,
+      },
+    };
+
+    try {
+      const result = await ChangeStatus(submitData).unwrap();
+      if (result.success) {
+        toast.success(result.message, { id: toastId });
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Something went wrong...", { id: toastId });
+    }
   };
 
   const menuProps = {
@@ -143,10 +167,15 @@ const RegisteredCourse = () => {
     },
     {
       title: "Action",
-      render: () => {
+      render: (item) => {
         return (
-          <Dropdown menu={menuProps}>
-            <Button style={{ backgroundColor: "blue", color: "white" }}>
+          <Dropdown menu={menuProps} trigger={["click"]}>
+            <Button
+              style={{ backgroundColor: "blue", color: "white" }}
+              onClick={() => {
+                setSemesterId(item.key);
+              }}
+            >
               Change Status
             </Button>
           </Dropdown>
@@ -180,7 +209,7 @@ const RegisteredCourse = () => {
         fontSize: "1rem",
       }}
       columns={columns}
-      dataSource={tableData}
+      dataSource={tableData as []}
       onChange={onChange}
       loading={isFetching || isLoading}
     />

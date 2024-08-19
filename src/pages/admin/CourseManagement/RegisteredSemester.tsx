@@ -1,12 +1,33 @@
-import type { TableColumnsType, TableProps } from "antd";
-import { Button, Flex, Table, Tag } from "antd";
+import {
+  Button,
+  Dropdown,
+  Table,
+  TableColumnsType,
+  TableProps,
+  Tag,
+} from "antd";
 import moment from "moment";
+import { MenuClickEventHandler, MenuInfo } from "rc-menu/lib/interface";
 import { useState } from "react";
 import { monthOptions } from "../../../constants/global";
 import { useGetAllSemesterRegistrationsQuery } from "../../../redux/features/admin/courseManagement.api";
 import { TQueryParam, TSemesterRegistration } from "../../../types";
-
 const MonthFilterOptions: { text: string; value: string }[] = [];
+
+const items = [
+  {
+    label: "UPCOMING",
+    key: "UPCOMING",
+  },
+  {
+    label: "ONGOING",
+    key: "ONGOING",
+  },
+  {
+    label: "ENDED",
+    key: "ENDED",
+  },
+];
 
 for (let i = 1; i <= 12; i++) {
   MonthFilterOptions.push({
@@ -53,6 +74,15 @@ const RegisteredCourse = () => {
       maxCredit,
     })
   );
+
+  const handleStatusChange = (key: MenuInfo) => {
+    console.log(key);
+  };
+
+  const menuProps = {
+    items,
+    onClick: handleStatusChange as MenuClickEventHandler,
+  };
 
   const columns: TableColumnsType<TTableData> = [
     {
@@ -115,12 +145,11 @@ const RegisteredCourse = () => {
       title: "Action",
       render: () => {
         return (
-          <Flex justify="start" align="center" gap={5}>
-            <Button type="primary">Edit</Button>
-            <Button style={{ backgroundColor: "red", color: "white" }}>
-              Delete
+          <Dropdown menu={menuProps}>
+            <Button style={{ backgroundColor: "blue", color: "white" }}>
+              Change Status
             </Button>
-          </Flex>
+          </Dropdown>
         );
       },
     },

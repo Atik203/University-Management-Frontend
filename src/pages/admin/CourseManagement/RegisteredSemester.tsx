@@ -1,5 +1,5 @@
 import type { TableColumnsType, TableProps } from "antd";
-import { Button, Flex, Table } from "antd";
+import { Button, Flex, Table, Tag } from "antd";
 import moment from "moment";
 import { useState } from "react";
 import { monthOptions } from "../../../constants/global";
@@ -92,20 +92,24 @@ const RegisteredCourse = () => {
     {
       title: "Status",
       dataIndex: "status",
-      filters: [
-        {
-          text: "UPCOMING",
-          value: "UPCOMING",
-        },
-        {
-          text: "ONGOING",
-          value: "ONGOING",
-        },
-        {
-          text: "ENDED",
-          value: "ENDED",
-        },
-      ],
+      render: (status) => {
+        let color;
+        if (status === "ONGOING") {
+          color = "green";
+        }
+        if (status === "UPCOMING") {
+          color = "blue";
+        }
+        if (status === "ENDED") {
+          color = "red";
+        }
+
+        return (
+          <Tag style={{ fontSize: "1rem", fontWeight: "500" }} color={color}>
+            {status}
+          </Tag>
+        );
+      },
     },
     {
       title: "Action",

@@ -1,10 +1,7 @@
 import { Button, Col, Flex } from "antd";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
 import { toast } from "sonner";
-import OpenDatePicker from "../../../components/form/OpenDatePicker";
 import OpenInput from "../../../components/form/OpenInput";
-import OpenSelect from "../../../components/form/OpenSelect";
-import { statusOptions } from "../../../constants/semester";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { useCreateCourseMutation } from "../../../redux/features/admin/courseManagement.api";
 import OpenForm from "./../../../components/form/OpenForm";
@@ -32,8 +29,8 @@ const CreateCourse = () => {
     try {
       const semesterData = {
         ...data,
-        minCredit: Number(data.minCredit),
-        maxCredit: Number(data.maxCredit),
+        credits: Number(data.credits),
+        code: Number(data.code),
       };
       const result = await CreateCourse(semesterData).unwrap();
       if (result.success) {
@@ -52,16 +49,10 @@ const CreateCourse = () => {
     <Flex justify="center" align="center">
       <Col span={7}>
         <OpenForm onSubmit={onSubmit}>
-          <OpenSelect
-            label="Academic Semester"
-            name="academicSemester"
-            options={semesterOptions}
-          />
-          <OpenSelect label="Status" name="status" options={statusOptions} />
-          <OpenDatePicker label="Start Date" name="startDate" />
-          <OpenDatePicker label="End Date" name="endDate" />
-          <OpenInput label="Minimum Credit" name="minCredit" type="text" />
-          <OpenInput label="Maximum Credit" name="maxCredit" type="text" />
+          <OpenInput label="Course Title" name="title" type="text" />
+          <OpenInput label="Course Prefix" name="prefix" type="text" />
+          <OpenInput label="Course Code" name="code" type="text" />
+          <OpenInput label="Credit" name="credits" type="text" />
 
           <Button type="primary" htmlType="submit">
             Submit

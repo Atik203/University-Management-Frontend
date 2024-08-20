@@ -7,6 +7,7 @@ export type TSelectProps = {
   name: string;
   disabled?: boolean;
   options: { value: string; label: string; disabled?: boolean }[] | undefined;
+  mode?: "multiple" | "tags" | undefined;
 };
 
 const OpenSelect: FC<TSelectProps> = ({
@@ -14,6 +15,7 @@ const OpenSelect: FC<TSelectProps> = ({
   name,
   options,
   disabled = false,
+  mode = undefined,
 }) => {
   return (
     <Controller
@@ -21,6 +23,7 @@ const OpenSelect: FC<TSelectProps> = ({
       render={({ field, fieldState: { error } }) => (
         <Form.Item label={label} style={{ marginBottom: "1rem" }}>
           <Select
+            mode={mode}
             style={{
               width: "100%",
               border: "1px solid black",

@@ -1,14 +1,16 @@
 import { Button, Modal, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
 import OpenForm from "../../../components/form/OpenForm";
 import OpenSelect from "../../../components/form/OpenSelect";
 import {
   useAssignFacultiesMutation,
   useGetAllCoursesQuery,
+  useGetCourseFacultiesQuery,
 } from "../../../redux/features/admin/courseManagement.api";
 import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
-import { TQueryParam } from "../../../types";
+import { TFaculty, TQueryParam } from "../../../types";
 import {
   TCourse,
   TPreRequisiteCourse,
@@ -17,7 +19,7 @@ import {
 type TTableData = Pick<
   TCourse,
   "title" | "code" | "credits" | "preRequisiteCourses" | "prefix"
->;
+> & { key: string };
 
 const Courses = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
@@ -71,7 +73,11 @@ const Courses = () => {
         }
       },
     },
-
+    {
+      title: "Faculties",
+      dataIndex: "key",
+      render: (courseId) => <CourseFaculties courseId={courseId} />,
+    },
     {
       title: "Action",
       render: (item) => {
@@ -112,8 +118,8 @@ const Courses = () => {
   );
 };
 
-const AddFacultyModal = ({ data }) => {
-  console.log(data);
+const AddFacultyModal = ({ data }: { data: TTableData }) => {
+  const id = data.key;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
@@ -129,7 +135,7 @@ const AddFacultyModal = ({ data }) => {
     value: faculty._id,
   }));
 
-  const [AssignFaculty] = useAssignFacultiesMutation();
+  const [AssignFaculties] = useAssignFacultiesMutation();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -143,8 +149,26 @@ const AddFacultyModal = ({ data }) => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const handleSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const toastId = toast.loading("Assigning faculties to course...");
+
+    try {
+      const submitData = {
+        id,
+        body: {
+          faculties: data.faculties,
+        },
+      };
+      const result = await AssignFaculties(submitData).unwrap();
+      if (result.success) {
+        toast.success("Faculties assigned successfully", { id: toastId });
+        handleOk();
+      } else {
+        toast.error("Failed to assign faculties", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Something went wrong...", { id: toastId });
+    }
   };
 
   if (isFetching || isLoading) {
@@ -161,17 +185,42 @@ const AddFacultyModal = ({ data }) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
         <OpenForm onSubmit={handleSubmit}>
           <OpenSelect
-            name="faculty"
+            name="faculties"
             label="Faculty"
             options={facultiesOptions}
+            mode="multiple"
           />
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </OpenForm>
       </Modal>
     </>
   );
+};
+
+const CourseFaculties = ({ courseId }: { courseId: string }) => {
+  const { data, isFetching, isLoading } = useGetCourseFacultiesQuery(courseId);
+
+  const facultiesData = data?.data?.faculties;
+
+  if (isFetching || isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (data?.data) {
+    return facultiesData?.map((faculty: TFaculty, index: number) => (
+      <p key={faculty._id}>
+        {index + 1}. {faculty.fullName}
+      </p>
+    ));
+  } else {
+    return <p>Not Available</p>;
+  }
 };
 
 export default Courses;

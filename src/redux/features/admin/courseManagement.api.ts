@@ -1,4 +1,9 @@
-import { TCourse, TResponseRedux, TSemesterRegistration } from "../../../types";
+import {
+  TCourse,
+  TCourseFaculties,
+  TResponseRedux,
+  TSemesterRegistration,
+} from "../../../types";
 import { baseApi } from "../../api/baseApi";
 
 const courseManagementApi = baseApi.injectEndpoints({
@@ -61,7 +66,8 @@ const courseManagementApi = baseApi.injectEndpoints({
         url: `/courses/${id}/get-faculties`,
         method: "GET",
       }),
-      transformResponse: (response) => {
+      providesTags: ["Course"],
+      transformResponse: (response: TResponseRedux<TCourseFaculties>) => {
         return {
           data: response?.data,
           meta: response?.meta,

@@ -38,3 +38,16 @@ export const genderSelectOptions = genderOptions.map((gender) => ({
   value: gender,
   label: gender,
 }));
+
+export const daysOptions = [
+  "Sat",
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+].map((day) => ({
+  label: day,
+  value: day,
+}));

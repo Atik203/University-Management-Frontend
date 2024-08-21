@@ -48,6 +48,10 @@ const CreateSemesterRegistration = () => {
     }
   };
 
+  if (isFetching || isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <Flex justify="center" align="center">
       <Col span={7}>

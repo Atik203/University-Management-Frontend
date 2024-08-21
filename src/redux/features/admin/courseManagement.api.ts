@@ -1,6 +1,7 @@
 import {
   TCourse,
   TCourseFaculties,
+  TOfferedCourse,
   TResponseRedux,
   TSemesterRegistration,
 } from "../../../types";
@@ -77,6 +78,43 @@ const courseManagementApi = baseApi.injectEndpoints({
 
     //! Offered Course
 
+    getAllOfferedCourses: builder.query({
+      query: () => ({
+        url: "/offered-courses",
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<TOfferedCourse[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      providesTags: ["OfferedCourse"],
+    }),
+
+    createOfferedCourse: builder.mutation({
+      query: (data) => ({
+        url: "/offered-courses/create-offered-course",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["OfferedCourse"],
+    }),
+
+    getMyOfferedCourses: builder.query({
+      query: () => ({
+        url: "/offered-courses/my-offered-courses",
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<TOfferedCourse[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+      providesTags: ["OfferedCourse"],
+    }),
+
     //! Semester Registration
     getAllSemesterRegistrations: builder.query({
       query: () => ({
@@ -123,4 +161,7 @@ export const {
   useGetAllSemesterRegistrationsQuery,
   useCreateSemesterRegistrationMutation,
   useUpdateSemesterRegistrationMutation,
+  useGetAllOfferedCoursesQuery,
+  useCreateOfferedCourseMutation,
+  useGetMyOfferedCoursesQuery,
 } = courseManagementApi;

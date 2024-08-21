@@ -1,14 +1,12 @@
-import { Button, Dropdown, Table, TableColumnsType, TableProps } from "antd";
-import { MenuClickEventHandler, MenuInfo } from "rc-menu/lib/interface";
+import { Button, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
-import { toast } from "sonner";
 import { monthOptions } from "../../../constants/global";
+import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement.api";
+import { TQueryParam } from "../../../types";
 import {
-  useGetAllCoursesQuery,
-  useUpdateSemesterRegistrationMutation,
-} from "../../../redux/features/admin/courseManagement.api";
-import { TQueryParam, TSemesterRegistration } from "../../../types";
-import { TPreRequisiteCourse } from "../../../types/courseManagement.types";
+  TCourse,
+  TPreRequisiteCourse,
+} from "../../../types/courseManagement.types";
 const MonthFilterOptions: { text: string; value: string }[] = [];
 
 const items = [
@@ -34,25 +32,18 @@ for (let i = 1; i <= 12; i++) {
 }
 
 type TTableData = Pick<
-  TSemesterRegistration,
-  | "academicSemester"
-  | "status"
-  | "startDate"
-  | "endDate"
-  | "minCredit"
-  | "maxCredit"
+  TCourse,
+  "title" | "code" | "credits" | "preRequisiteCourses" | "prefix"
 >;
 
 const Courses = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
-  const [semesterId, setSemesterId] = useState("");
 
   const {
     data: courseData,
     isFetching,
     isLoading,
   } = useGetAllCoursesQuery(params);
-  const [ChangeStatus] = useUpdateSemesterRegistrationMutation();
 
   const tableData = courseData?.data?.map(
     ({ _id, title, code, prefix, preRequisiteCourses, credits }) => ({
@@ -64,33 +55,6 @@ const Courses = () => {
       credits,
     })
   );
-
-  const handleStatusChange = async (data: MenuInfo) => {
-    const toastId = toast.loading("Changing Status...");
-
-    const submitData = {
-      id: semesterId,
-      body: {
-        status: data.key,
-      },
-    };
-
-    try {
-      const result = await ChangeStatus(submitData).unwrap();
-      if (result.success) {
-        toast.success(result.message, { id: toastId });
-      } else {
-        toast.error(result.message, { id: toastId });
-      }
-    } catch (error) {
-      toast.error("Something went wrong...", { id: toastId });
-    }
-  };
-
-  const menuProps = {
-    items,
-    onClick: handleStatusChange as MenuClickEventHandler,
-  };
 
   const columns: TableColumnsType<TTableData> = [
     {
@@ -112,31 +76,26 @@ const Courses = () => {
         if (preRequisiteCourses.length === 0) {
           return <p>None</p>;
         } else {
-          return preRequisiteCourses.map((item: TPreRequisiteCourse, index) => {
-            return (
-              <h5>
-                {index + 1}. {item.course.prefix + item.course.code}
-              </h5>
-            );
-          });
+          return preRequisiteCourses.map(
+            (item: TPreRequisiteCourse, index: number) => {
+              return (
+                <h5>
+                  {index + 1}. {item.course.prefix + item.course.code}
+                </h5>
+              );
+            }
+          );
         }
       },
     },
 
     {
       title: "Action",
-      render: (item) => {
+      render: () => {
         return (
-          <Dropdown menu={menuProps} trigger={["click"]}>
-            <Button
-              style={{ backgroundColor: "blue", color: "white" }}
-              onClick={() => {
-                setSemesterId(item.key);
-              }}
-            >
-              Change Status
-            </Button>
-          </Dropdown>
+          <Button style={{ backgroundColor: "blue", color: "white" }}>
+            Change Status
+          </Button>
         );
       },
     },

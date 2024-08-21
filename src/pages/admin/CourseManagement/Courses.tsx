@@ -1,35 +1,18 @@
-import { Button, Table, TableColumnsType, TableProps } from "antd";
+import { Button, Modal, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
-import { monthOptions } from "../../../constants/global";
-import { useGetAllCoursesQuery } from "../../../redux/features/admin/courseManagement.api";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import OpenForm from "../../../components/form/OpenForm";
+import OpenSelect from "../../../components/form/OpenSelect";
+import {
+  useAssignFacultiesMutation,
+  useGetAllCoursesQuery,
+} from "../../../redux/features/admin/courseManagement.api";
+import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
 import { TQueryParam } from "../../../types";
 import {
   TCourse,
   TPreRequisiteCourse,
 } from "../../../types/courseManagement.types";
-const MonthFilterOptions: { text: string; value: string }[] = [];
-
-const items = [
-  {
-    label: "UPCOMING",
-    key: "UPCOMING",
-  },
-  {
-    label: "ONGOING",
-    key: "ONGOING",
-  },
-  {
-    label: "ENDED",
-    key: "ENDED",
-  },
-];
-
-for (let i = 1; i <= 12; i++) {
-  MonthFilterOptions.push({
-    text: monthOptions[i - 1].value,
-    value: monthOptions[i - 1].value,
-  });
-}
 
 type TTableData = Pick<
   TCourse,
@@ -91,12 +74,8 @@ const Courses = () => {
 
     {
       title: "Action",
-      render: () => {
-        return (
-          <Button style={{ backgroundColor: "blue", color: "white" }}>
-            Change Status
-          </Button>
-        );
+      render: (item) => {
+        return <AddFacultyModal data={item} />;
       },
     },
   ];
@@ -130,6 +109,68 @@ const Courses = () => {
       onChange={onChange}
       loading={isFetching || isLoading}
     />
+  );
+};
+
+const AddFacultyModal = ({ data }) => {
+  console.log(data);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {
+    data: facultyData,
+    isFetching,
+    isLoading,
+  } = useGetAllFacultiesQuery(undefined);
+
+  const faculties = facultyData?.data;
+
+  const facultiesOptions = faculties?.map((faculty) => ({
+    label: faculty.fullName,
+    value: faculty._id,
+  }));
+
+  const [AssignFaculty] = useAssignFacultiesMutation();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+  };
+
+  if (isFetching || isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <>
+      <Button type="primary" onClick={showModal}>
+        Add Faculty
+      </Button>
+      <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <OpenForm onSubmit={handleSubmit}>
+          <OpenSelect
+            name="faculty"
+            label="Faculty"
+            options={facultiesOptions}
+          />
+        </OpenForm>
+      </Modal>
+    </>
   );
 };
 

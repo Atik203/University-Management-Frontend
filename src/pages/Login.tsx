@@ -10,7 +10,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 const defaultValues = {
   id: "2025010001",
-  password: "password123",
+  password: "student123", // password123 for default
 };
 
 const Login = () => {

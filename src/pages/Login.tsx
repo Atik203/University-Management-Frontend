@@ -9,7 +9,7 @@ import { setUser, TUser } from "../redux/features/auth/authSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 const defaultValues = {
-  id: "A-0001",
+  id: "2025010001",
   password: "password123",
 };
 

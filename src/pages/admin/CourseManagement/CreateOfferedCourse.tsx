@@ -74,9 +74,10 @@ const CreateOfferedCourse = () => {
     })
   );
 
-  const { data: facultiesData } = useGetCourseFacultiesQuery(id, {
-    skip: semesterRegistrationData?.data?.length === 0,
-  });
+  const { data: facultiesData, isFetching: isCourseFacultiesFetching } =
+    useGetCourseFacultiesQuery(id, {
+      skip: id === "",
+    });
 
   const facultiesOptions = facultiesData?.data?.faculties?.map((faculty) => ({
     label: faculty.fullName,
@@ -144,7 +145,7 @@ const CreateOfferedCourse = () => {
             label="Faculty"
             name="faculty"
             options={facultiesOptions}
-            disabled={!id}
+            disabled={!id || isCourseFacultiesFetching}
           />
           <OpenSelect
             label="Days"

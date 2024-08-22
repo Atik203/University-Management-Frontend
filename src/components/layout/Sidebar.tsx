@@ -1,12 +1,13 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { Link } from "react-router-dom";
-import { useCurrentUser } from "../../redux/features/auth/authSlice";
+import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import { adminPaths } from "../../routes/admin.routes";
 import { facultyPaths } from "../../routes/faculty.routes";
 import { studentPaths } from "../../routes/student.routes";
 import { TUserPath } from "../../types";
 import { sidebarItemsGenerator } from "../../utils/sidebarItemsGenerator";
+import { verifyToken } from "../../utils/verifyToken";
 
 const { Sider } = Layout;
 
@@ -17,7 +18,11 @@ const userRole = {
 };
 
 const Sidebar = () => {
-  const user = useAppSelector(useCurrentUser);
+  let user;
+  const token = useAppSelector(useCurrentToken);
+  if (token) {
+    user = verifyToken(token);
+  }
 
   const role = user?.role;
   let sidebarItems;

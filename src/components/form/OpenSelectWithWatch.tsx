@@ -1,5 +1,5 @@
 import { Form, Select } from "antd";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 export type TSelectProps = {
@@ -8,6 +8,7 @@ export type TSelectProps = {
   disabled?: boolean;
   options: { value: string; label: string; disabled?: boolean }[] | undefined;
   mode?: "multiple" | "tags" | undefined;
+  onValueChange?: (value: string) => void;
 };
 
 const OpenSelectWithWatch: FC<TSelectProps> = ({
@@ -16,12 +17,19 @@ const OpenSelectWithWatch: FC<TSelectProps> = ({
   options,
   disabled = false,
   mode = undefined,
+  onValueChange,
 }) => {
   const { control } = useFormContext();
   const inputValue = useWatch({
     control,
     name,
   });
+
+  useEffect(() => {
+    if (onValueChange) {
+      onValueChange(inputValue);
+    }
+  }, [inputValue, onValueChange]);
 
   return (
     <Controller

@@ -1,9 +1,11 @@
 import { Button, Col, Flex } from "antd";
 import moment from "moment";
+import { useState } from "react";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
 import { toast } from "sonner";
 import OpenInput from "../../../components/form/OpenInput";
 import OpenSelect from "../../../components/form/OpenSelect";
+import OpenSelectWithWatch from "../../../components/form/OpenSelectWithWatch";
 import { daysOptions } from "../../../constants/global";
 import {
   useGetAllAcademicDepartmentsQuery,
@@ -13,17 +15,18 @@ import {
   useCreateOfferedCourseMutation,
   useGetAllCoursesQuery,
   useGetAllSemesterRegistrationsQuery,
+  useGetCourseFacultiesQuery,
 } from "../../../redux/features/admin/courseManagement.api";
-import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
 import OpenForm from "./../../../components/form/OpenForm";
 
 const CreateOfferedCourse = () => {
+  const [id, setId] = useState("");
   const [CreateOfferedCourse] = useCreateOfferedCourseMutation();
 
   const {
     data: semesterRegistrationData,
     isFetching,
-    isLoadings,
+    isLoading,
   } = useGetAllSemesterRegistrationsQuery(undefined);
 
   const semesterRegistrationOptions = semesterRegistrationData?.data?.map(
@@ -71,11 +74,11 @@ const CreateOfferedCourse = () => {
     })
   );
 
-  const { data: facultiesData } = useGetAllFacultiesQuery(undefined, {
+  const { data: facultiesData } = useGetCourseFacultiesQuery(id, {
     skip: semesterRegistrationData?.data?.length === 0,
   });
 
-  const facultiesOptions = facultiesData?.data?.map((faculty) => ({
+  const facultiesOptions = facultiesData?.data?.faculties?.map((faculty) => ({
     label: faculty.fullName,
     value: faculty._id,
   }));
@@ -109,10 +112,9 @@ const CreateOfferedCourse = () => {
     }
   };
 
-  if (isFetching || isLoadings) {
+  if (isFetching || isLoading) {
     return <p>Loading...</p>;
   }
-
   return (
     <Flex justify="center" align="center">
       <Col span={7}>
@@ -127,7 +129,12 @@ const CreateOfferedCourse = () => {
             name="academicFaculty"
             options={academicFacultyOptions}
           />
-          <OpenSelect label="Course" name="course" options={courseOptions} />
+          <OpenSelectWithWatch
+            label="Course"
+            name="course"
+            onValueChange={setId}
+            options={courseOptions}
+          />
           <OpenSelect
             label="Semester Registration"
             name="semesterRegistration"
@@ -137,6 +144,7 @@ const CreateOfferedCourse = () => {
             label="Faculty"
             name="faculty"
             options={facultiesOptions}
+            disabled={!id}
           />
           <OpenSelect
             label="Days"

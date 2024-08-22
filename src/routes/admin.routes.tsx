@@ -9,6 +9,7 @@ import Courses from "../pages/admin/CourseManagement/Courses";
 import CreateCourse from "../pages/admin/CourseManagement/CreateCourse";
 import CreateOfferedCourse from "../pages/admin/CourseManagement/CreateOfferedCourse";
 import CreateSemesterRegistration from "../pages/admin/CourseManagement/CreateSemesterRegistration";
+import OfferedCourses from "../pages/admin/CourseManagement/OfferedCourses";
 import RegisteredSemester from "../pages/admin/CourseManagement/RegisteredSemester";
 import AdminData from "../pages/admin/UserManagement/admin/AdminData";
 import AdminDetails from "../pages/admin/UserManagement/admin/AdminDetails";
@@ -22,7 +23,6 @@ import CreateStudent from "../pages/admin/UserManagement/student/CreateStudent";
 import StudentData from "../pages/admin/UserManagement/student/StudentData";
 import StudentDetails from "../pages/admin/UserManagement/student/StudentDetails";
 import UpdateStudent from "../pages/admin/UserManagement/student/UpdateStudent";
-import OfferedCourse from "../pages/faculty/OfferedCourse";
 
 export const adminPaths = [
   {
@@ -155,7 +155,7 @@ export const adminPaths = [
       {
         name: "Offered Courses",
         path: "offered-courses",
-        element: <OfferedCourse />,
+        element: <OfferedCourses />,
       },
     ],
   },

@@ -9,7 +9,7 @@ const facultyCourseManagementApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["EnrolledCourse"],
-      transformResponse: (response: TResponseRedux<TEnrolledCourse>) => {
+      transformResponse: (response: TResponseRedux<TEnrolledCourse[]>) => {
         return {
           data: response.data,
           meta: response.meta,

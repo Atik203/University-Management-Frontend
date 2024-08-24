@@ -1,4 +1,5 @@
 import { TOfferedCourse, TQueryParam, TResponseRedux } from "../../../types";
+import { TEnrolledCourse } from "../../../types/studentCourseManagement";
 import { baseApi } from "../../api/baseApi";
 
 const studentCourseManagementApi = baseApi.injectEndpoints({
@@ -34,21 +35,14 @@ const studentCourseManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["EnrolledCourse", "OfferedCourse"],
     }),
     getMyEnrolledCourses: builder.query({
-      query: (args: TQueryParam[]) => {
-        const params = new URLSearchParams();
-        if (args.length) {
-          args.forEach((arg) => {
-            params.append(arg.name, arg.value as string);
-          });
-        }
+      query: () => {
         return {
           url: "/enrolled-courses/my-enrolled-courses",
           method: "GET",
-          params: params,
         };
       },
       providesTags: ["EnrolledCourse"],
-      transformResponse: (response: TResponseRedux<TOfferedCourse[]>) => {
+      transformResponse: (response: TResponseRedux<TEnrolledCourse[]>) => {
         return {
           data: response.data,
           meta: response.meta,

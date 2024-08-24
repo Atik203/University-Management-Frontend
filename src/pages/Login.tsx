@@ -9,8 +9,8 @@ import { setUser, TUser } from "../redux/features/auth/authSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
 const defaultValues = {
-  id: "2025010001",
-  password: "student123", // password123 for default
+  id: "F-0002", //2025010001
+  password: "faculty123", // password123 for default
 };
 
 const Login = () => {

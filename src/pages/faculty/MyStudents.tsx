@@ -5,8 +5,24 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import OpenForm from "../../components/form/OpenForm";
 import OpenInput from "../../components/form/OpenInput";
-import { useUpdateCourseMutation } from "../../redux/features/admin/courseManagement.api";
-import { useGetFacultyEnrolledCoursesQuery } from "../../redux/features/faculty/facultyCourseManagement.api";
+import {
+  useGetFacultyEnrolledCoursesQuery,
+  useUpdateCourseMarksMutation,
+} from "../../redux/features/faculty/facultyCourseManagement.api";
+import { TCourseMarks } from "../../types";
+
+interface TStudentInfo {
+  key: string;
+  name: string;
+  roll: string;
+  semesterRegistration: string;
+  student: string;
+  offeredCourse: string;
+  department: string;
+  courseMarks: TCourseMarks;
+  grade: string;
+  gradePoints: number;
+}
 
 const MyStudents = () => {
   const { registerSemesterId, courseId } = useParams();
@@ -22,6 +38,9 @@ const MyStudents = () => {
       semesterRegistration,
       offeredCourse,
       academicDepartment,
+      courseMarks,
+      grade,
+      gradePoints,
     }) => ({
       key: _id,
       name: student.fullName,
@@ -30,6 +49,9 @@ const MyStudents = () => {
       student: student._id,
       offeredCourse: offeredCourse._id,
       department: academicDepartment.name,
+      courseMarks,
+      grade,
+      gradePoints,
     })
   );
 
@@ -50,9 +72,33 @@ const MyStudents = () => {
       dataIndex: "department",
     },
     {
+      title: "Marks",
+      key: "courseMarks",
+      render: (item: TStudentInfo) => {
+        return (
+          <ol>
+            <li>Class Test 1: {item.courseMarks.classTest1}</li>
+            <li>Class Test 2: {item.courseMarks.classTest2}</li>
+            <li>Midterm: {item.courseMarks.midTerm}</li>
+            <li>Final: {item.courseMarks.finalTerm}</li>
+          </ol>
+        );
+      },
+    },
+    {
+      title: "Grade",
+      key: "grade",
+      dataIndex: "grade",
+    },
+    {
+      title: "CGPA",
+      key: "gradePoints",
+      dataIndex: "gradePoints",
+    },
+    {
       title: "Action",
       key: "x",
-      render: (item) => {
+      render: (item: TStudentInfo) => {
         return (
           <div>
             <AddMarksModal studentInfo={item} />
@@ -62,12 +108,21 @@ const MyStudents = () => {
     },
   ];
 
-  return <Table columns={columns} dataSource={tableData} />;
+  return (
+    <Table
+      style={{
+        fontSize: "1rem",
+        fontWeight: "400",
+      }}
+      columns={columns}
+      dataSource={tableData}
+    />
+  );
 };
 
-const AddMarksModal = ({ studentInfo }) => {
+const AddMarksModal = ({ studentInfo }: { studentInfo: TStudentInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [updateMarks] = useUpdateCourseMutation();
+  const [UpdateCourseMarks] = useUpdateCourseMarksMutation();
 
   const handleSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Updating marks...");
@@ -76,15 +131,15 @@ const AddMarksModal = ({ studentInfo }) => {
       offeredCourse: studentInfo.offeredCourse,
       student: studentInfo.student,
       courseMarks: {
-        classTest1: Number(data.classTest1),
-        midTerm: Number(data.midTerm),
-        classTest2: Number(data.classTest2),
-        finalTerm: Number(data.finalTerm),
+        classTest1: Number(data.classTest1) || 0,
+        midTerm: Number(data.midTerm) || 0,
+        classTest2: Number(data.classTest2) || 0,
+        finalTerm: Number(data.finalTerm) || 0,
       },
     };
 
     try {
-      const result = await updateMarks(studentMark).unwrap();
+      const result = await UpdateCourseMarks(studentMark).unwrap();
       if (result.success) {
         toast.success(result.message, { id: toastId });
         setIsModalOpen(false);
@@ -112,8 +167,9 @@ const AddMarksModal = ({ studentInfo }) => {
           color: "white",
         }}
         onClick={showModal}
+        disabled={studentInfo.gradePoints > 0}
       >
-        Add Faculty
+        Add Marks
       </Button>
       <Modal
         title="Basic Modal"

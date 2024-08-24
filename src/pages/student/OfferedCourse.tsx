@@ -1,5 +1,7 @@
 import { Button, Col, Row } from "antd";
+import { toast } from "sonner";
 import { useGetMyOfferedCoursesQuery } from "../../redux/features/admin/courseManagement.api";
+import { useEnrolledCourseMutation } from "../../redux/features/student/studentCourseManagement.api";
 
 type TModifiedOfferedCourse = {
   courseTitle: string;
@@ -17,6 +19,8 @@ type TOfferedCoursesAccumulator = {
 const OfferedCourse = () => {
   const { data, isFetching, isLoading } =
     useGetMyOfferedCoursesQuery(undefined);
+
+  const [EnrolledCourse] = useEnrolledCourseMutation();
 
   const offeredCourses =
     data?.data?.reduce<TOfferedCoursesAccumulator>((acc, item) => {
@@ -36,10 +40,29 @@ const OfferedCourse = () => {
     offeredCourses
   ) as TModifiedOfferedCourse[];
 
+  const handleEnroll = async (id: string) => {
+    const toastId = toast.loading("Enrolling...");
+    try {
+      const submitData = {
+        offeredCourse: id,
+      };
+      const result = await EnrolledCourse(submitData).unwrap();
+      if (result.success) {
+        toast.success(result.message, { id: toastId });
+      } else {
+        toast.error(result.message, { id: toastId });
+      }
+    } catch (error) {
+      toast.error("something went wrong", { id: toastId });
+    }
+  };
+
   if (isFetching || isLoading) {
     return <p>Loading...</p>;
   }
-
+  if (!modifiedOfferedCourses.length) {
+    return <p>No available courses</p>;
+  }
   return (
     <Row gutter={[0, 20]}>
       {modifiedOfferedCourses.map((item) => {
@@ -71,6 +94,7 @@ const OfferedCourse = () => {
                     <Col span={5}>Start Time: {section.startTime} </Col>
                     <Col span={5}>End Time: {section.endTime} </Col>
                     <Button
+                      onClick={() => handleEnroll(section._id)}
                       style={{
                         backgroundColor: "black",
                         color: "white",
